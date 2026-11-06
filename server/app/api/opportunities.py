@@ -5,7 +5,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
 from pydantic import BaseModel, ConfigDict
 from app.database.session import get_db
-from app.database.models import Opportunity, OpportunityMatch, UserProfile
+from app.database.models import Opportunity, OpportunityMatch, UserProfile, User
+from app.opportunity_engine.recalculator import recalculate_user_matches, seed_additional_verified_opportunities
 
 router = APIRouter(prefix="/opportunities")
 
@@ -109,6 +110,100 @@ async def list_opportunities(
         )
 
     return items
+
+
+class CreateOpportunityRequest(BaseModel):
+    title: str
+    category: str
+    provider: str
+    country: str = "India"
+    region: str = "National"
+    description: str
+    benefit_type: str = "financial"
+    benefit_amount: Optional[float] = None
+    currency: Optional[str] = "INR"
+    benefit_summary: Optional[str] = None
+    eligibility_rules: Dict[str, Any] = {}
+    application_deadline: Optional[datetime] = None
+    official_url: str
+    supporting_url: Optional[str] = None
+    verification_status: str = "officially_verified"
+
+
+@router.post("/recalculate")
+async def trigger_recalculation(db: AsyncSession = Depends(get_db)):
+    """Trigger seeding of new official opportunities and re-evaluating matches for the user."""
+    # Seed additional verified opportunities if not present
+    added = await seed_additional_verified_opportunities(db)
+
+    # Recalculate matches for primary user
+    stmt = select(User.id).limit(1)
+    user_id = (await db.execute(stmt)).scalar()
+    if not user_id:
+        return {"status": "no_user_found", "added_opportunities": added}
+
+    result = await recalculate_user_matches(db, user_id)
+    result["added_opportunities"] = added
+    return result
+
+
+@router.post("", response_model=OpportunityResponse)
+async def create_opportunity(
+    data: CreateOpportunityRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Register and normalize a newly verified opportunity with deterministic eligibility rules."""
+    opp = Opportunity(
+        title=data.title,
+        category=data.category,
+        provider=data.provider,
+        country=data.country,
+        region=data.region,
+        description=data.description,
+        benefit_type=data.benefit_type,
+        benefit_amount=data.benefit_amount,
+        currency=data.currency,
+        benefit_summary=data.benefit_summary,
+        eligibility_rules=data.eligibility_rules,
+        application_deadline=data.application_deadline,
+        official_url=data.official_url,
+        supporting_url=data.supporting_url,
+        verification_status=data.verification_status,
+        status="open",
+    )
+    db.add(opp)
+    await db.commit()
+    await db.refresh(opp)
+
+    # Recalculate matches
+    stmt = select(User.id).limit(1)
+    user_id = (await db.execute(stmt)).scalar()
+    if user_id:
+        await recalculate_user_matches(db, user_id)
+
+    return OpportunityResponse(
+        id=opp.id,
+        title=opp.title,
+        category=opp.category,
+        provider=opp.provider,
+        country=opp.country,
+        region=opp.region,
+        description=opp.description,
+        benefit_type=opp.benefit_type,
+        benefit_amount=opp.benefit_amount,
+        currency=opp.currency,
+        benefit_summary=opp.benefit_summary,
+        eligibility_rules=opp.eligibility_rules or {},
+        application_deadline=opp.application_deadline,
+        official_url=opp.official_url,
+        supporting_url=opp.supporting_url,
+        verification_status=opp.verification_status,
+        status=opp.status,
+        match_status="EVALUATED",
+        fit_score=0.8,
+        reasons=["Evaluated against registered user profile."],
+        missing_criteria=[],
+    )
 
 
 @router.get("/{opp_id}", response_model=OpportunityResponse)

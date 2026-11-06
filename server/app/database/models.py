@@ -179,6 +179,21 @@ class Opportunity(Base):
 
     source: Mapped[Optional["Source"]] = relationship("Source", back_populates="opportunities")
     matches: Mapped[List["OpportunityMatch"]] = relationship("OpportunityMatch", back_populates="opportunity", cascade="all, delete-orphan")
+    verification_records: Mapped[List["VerificationRecord"]] = relationship("VerificationRecord", back_populates="opportunity", cascade="all, delete-orphan")
+
+
+class VerificationRecord(Base):
+    __tablename__ = "verification_records"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    opportunity_id: Mapped[int] = mapped_column(ForeignKey("opportunities.id", ondelete="CASCADE"), nullable=False)
+    status: Mapped[str] = mapped_column(String(50), nullable=False)
+    verified_url: Mapped[str] = mapped_column(String(1000), nullable=False)
+    evidence_text: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    verifier: Mapped[str] = mapped_column(String(100), default="automated_official_check")
+    verified_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+
+    opportunity: Mapped["Opportunity"] = relationship("Opportunity", back_populates="verification_records")
 
 
 class OpportunityMatch(Base):

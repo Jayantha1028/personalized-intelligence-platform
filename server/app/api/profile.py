@@ -5,6 +5,7 @@ from sqlalchemy import select
 from pydantic import BaseModel, ConfigDict
 from app.database.session import get_db
 from app.database.models import User, UserProfile
+from app.opportunity_engine.recalculator import recalculate_user_matches
 
 router = APIRouter(prefix="/profile")
 
@@ -90,4 +91,8 @@ async def update_profile(data: UserProfileUpdate, db: AsyncSession = Depends(get
 
     await db.commit()
     await db.refresh(profile)
+
+    # Automatically re-evaluate all deterministic opportunity matches for the user
+    await recalculate_user_matches(db, profile.user_id)
+
     return profile
