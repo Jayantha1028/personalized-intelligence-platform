@@ -141,6 +141,19 @@ export async function syncNewsFeeds(): Promise<any> {
   return res.json();
 }
 
+export async function scrapeArticleUrl(url: string, topic?: string): Promise<Article> {
+  const res = await fetch(`${API_BASE_URL}/news/scrape`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url, topic }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to scrape URL");
+  }
+  return res.json();
+}
+
 export interface SavedItem {
   id: number;
   item_type: string;
