@@ -9,6 +9,9 @@ from app.api.sources import router as sources_router
 from app.api.saved_items import router as saved_router
 from app.api.applications import router as app_router
 from app.api.notifications import router as notifications_router
+from app.api.circular_intelligence import router as circulars_router
+from app.api.security_advisories import router as security_router
+from app.api.academic_records import router as academic_router
 
 api_router = APIRouter()
 api_router.include_router(health_router, tags=["Health"])
@@ -20,3 +23,6 @@ api_router.include_router(sources_router, tags=["Source Registry"])
 api_router.include_router(saved_router, tags=["Saved Items"])
 api_router.include_router(app_router, tags=["Application Tracker"])
 api_router.include_router(notifications_router, tags=["Notifications & Alerts"])
+api_router.include_router(circulars_router, tags=["Document & Circular Intelligence"])
+api_router.include_router(security_router, tags=["Developer Security Advisories"])
+api_router.include_router(academic_router, tags=["Academic Records Simulator"])

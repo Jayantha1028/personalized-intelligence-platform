@@ -30,6 +30,7 @@ import { ProfileView } from "@/components/ProfileView";
 import { SourcesView } from "@/components/SourcesView";
 import { SavedAndApplicationsView } from "@/components/SavedAndApplicationsView";
 import { NotificationsDrawer } from "@/components/NotificationsDrawer";
+import { SecurityAdvisoriesView } from "@/components/SecurityAdvisoriesView";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -163,6 +164,8 @@ export default function Home() {
                   onRefresh={loadData}
                 />
               )}
+
+              {currentTab === "security" && <SecurityAdvisoriesView />}
 
               {currentTab === "profile" && profile && (
                 <ProfileView

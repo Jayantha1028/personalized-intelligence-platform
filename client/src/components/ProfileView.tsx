@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { UserProfile, updateProfile } from "@/services/api";
+import { AcademicSimulatorWidget } from "@/components/AcademicSimulatorWidget";
 import { UserCheck, Save, CheckCircle, AlertCircle, Shield } from "lucide-react";
 
 interface ProfileViewProps {
@@ -20,6 +21,19 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
     age: profile.age || 21,
     skills: profile.skills ? profile.skills.join(", ") : "Python, Cloud, AI/ML",
   });
+
+  useEffect(() => {
+    setFormData({
+      country: profile.country || "India",
+      state: profile.state || "Karnataka",
+      education_level: profile.education_level || "undergraduate",
+      course_or_degree: profile.course_or_degree || "B.Tech Computer Science",
+      academic_year: profile.academic_year || 3,
+      annual_income: profile.annual_income || 400000,
+      age: profile.age || 21,
+      skills: profile.skills ? profile.skills.join(", ") : "Python, Cloud, AI/ML",
+    });
+  }, [profile]);
 
   const [saving, setSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
@@ -66,6 +80,12 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
           Your profile parameters are strictly used for client-side and deterministic server-side opportunity matching. No sensitive documents are ever requested or stored.
         </p>
       </div>
+
+      {/* Institutional Academic Verification Simulator */}
+      <AcademicSimulatorWidget
+        currentProfile={profile}
+        onProfileUpdated={onProfileUpdated}
+      />
 
       <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-6 shadow-sm">
         <form onSubmit={handleSubmit} className="space-y-5">

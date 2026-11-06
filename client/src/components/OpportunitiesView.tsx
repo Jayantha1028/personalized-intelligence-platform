@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Opportunity, trackApplication } from "@/services/api";
+import { CircularIntelligenceModal } from "@/components/CircularIntelligenceModal";
 import {
   Award,
   CheckCircle2,
@@ -13,6 +14,7 @@ import {
   Building,
   Tag,
   ListChecks,
+  FileText,
 } from "lucide-react";
 
 interface OpportunitiesViewProps {
@@ -25,6 +27,7 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
   const [selectedMatch, setSelectedMatch] = useState<string>("All");
   const [trackedIds, setTrackedIds] = useState<Set<number>>(new Set());
   const [trackingId, setTrackingId] = useState<number | null>(null);
+  const [circularModalOpen, setCircularModalOpen] = useState<boolean>(false);
 
   const handleTrack = async (oppId: number) => {
     if (trackedIds.has(oppId) || trackingId === oppId) return;
@@ -61,13 +64,23 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
   return (
     <div className="space-y-6">
       {/* View Header */}
-      <div>
-        <h2 className="text-xl font-bold text-white tracking-tight">
-          Opportunity & Benefit Intelligence
-        </h2>
-        <p className="text-sm text-slate-400 mt-1">
-          Verified scholarships, government schemes, developer credits, and internships matched against your profile using deterministic rules.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-white tracking-tight">
+            Opportunity & Benefit Intelligence
+          </h2>
+          <p className="text-sm text-slate-400 mt-1">
+            Verified scholarships, government schemes, developer credits, and internships matched against your profile using deterministic rules.
+          </p>
+        </div>
+
+        <button
+          onClick={() => setCircularModalOpen(true)}
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-indigo-500/40 text-indigo-300 font-medium text-xs shadow-sm hover:border-indigo-400 transition-all shrink-0"
+        >
+          <FileText className="w-4 h-4 text-indigo-400" />
+          <span>Analyze Scheme Circular</span>
+        </button>
       </div>
 
       {/* Filter Row */}
@@ -242,6 +255,13 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
           })
         )}
       </div>
+
+      {/* Circular Intelligence Modal */}
+      <CircularIntelligenceModal
+        isOpen={circularModalOpen}
+        onClose={() => setCircularModalOpen(false)}
+        onOpportunityCreated={onRefresh}
+      />
     </div>
   );
 }

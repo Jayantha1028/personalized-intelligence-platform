@@ -258,3 +258,137 @@ export async function markNotificationRead(id: number): Promise<void> {
 export async function markAllNotificationsRead(): Promise<void> {
   await fetch(`${API_BASE_URL}/notifications/read-all`, { method: "PUT" });
 }
+
+// -------------------------------------------------------------
+// Document & Circular Intelligence (Collected Microservices)
+// -------------------------------------------------------------
+export interface SampleCircular {
+  id: string;
+  title: string;
+  provider: string;
+  category: string;
+  text: string;
+}
+
+export interface ParsedCircularResponse {
+  title: string;
+  provider: string;
+  category: string;
+  extracted_entities: {
+    emails: string[];
+    phone_numbers: string[];
+    monetary_amounts: string[];
+    dates: string[];
+  };
+  detected_deadline?: string;
+  detected_benefit_amount?: number;
+  detected_currency: string;
+  benefit_summary: string;
+  eligibility_signals: string[];
+  suggested_rules: Record<string, any>;
+  confidence_score: number;
+}
+
+export async function fetchSampleCirculars(): Promise<SampleCircular[]> {
+  const res = await fetch(`${API_BASE_URL}/circulars/samples`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch sample circulars");
+  return res.json();
+}
+
+export async function analyzeCircular(data: {
+  title?: string;
+  text: string;
+  provider?: string;
+  category?: string;
+}): Promise<ParsedCircularResponse> {
+  const res = await fetch(`${API_BASE_URL}/circulars/analyze`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) throw new Error("Failed to analyze circular");
+  return res.json();
+}
+
+// -------------------------------------------------------------
+// Developer Security Advisories & CVE Radar
+// -------------------------------------------------------------
+export interface SecurityAdvisory {
+  cve_id: string;
+  target_image: string;
+  package: string;
+  severity: "CRITICAL" | "HIGH" | "MEDIUM" | "LOW";
+  cvss: number;
+  description: string;
+  fixed_in?: string;
+  remediation?: string;
+  mitre_technique?: string;
+}
+
+export interface SecurityAdvisoriesResponse {
+  total_matched: number;
+  summary: {
+    critical_count: number;
+    high_count: number;
+    medium_count: number;
+    total_tracked: number;
+  };
+  advisories: SecurityAdvisory[];
+}
+
+export async function fetchSecurityAdvisories(
+  severity?: string,
+  keyword?: string,
+  minCvss?: number
+): Promise<SecurityAdvisoriesResponse> {
+  const params = new URLSearchParams();
+  if (severity && severity !== "All") params.append("severity", severity);
+  if (keyword) params.append("keyword", keyword);
+  if (minCvss) params.append("min_cvss", String(minCvss));
+
+  const url = `${API_BASE_URL}/security/advisories?${params.toString()}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch security advisories");
+  return res.json();
+}
+
+export async function fetchSecuritySignatures(): Promise<any> {
+  const res = await fetch(`${API_BASE_URL}/security/signatures`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch security signatures");
+  return res.json();
+}
+
+// -------------------------------------------------------------
+// Academic Records Simulator
+// -------------------------------------------------------------
+export interface StudentRecord {
+  id: number;
+  name: string;
+  class: string;
+  specialization: string;
+  mentor: string;
+  attendance: number;
+  cgpa: number;
+}
+
+export interface AcademicRecordsResponse {
+  total_matched: number;
+  students: StudentRecord[];
+}
+
+export async function fetchAcademicRecords(specialization?: string): Promise<AcademicRecordsResponse> {
+  const url = specialization && specialization !== "All"
+    ? `${API_BASE_URL}/academic/records?specialization=${encodeURIComponent(specialization)}`
+    : `${API_BASE_URL}/academic/records`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch academic records");
+  return res.json();
+}
+
+export async function syncAcademicRecord(studentId: number): Promise<any> {
+  const res = await fetch(`${API_BASE_URL}/academic/sync-profile/${studentId}`, {
+    method: "POST",
+  });
+  if (!res.ok) throw new Error("Failed to sync academic record");
+  return res.json();
+}

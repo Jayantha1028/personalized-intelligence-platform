@@ -11,9 +11,10 @@ import {
   ShieldCheck,
   Sparkles,
   Bookmark,
+  ShieldAlert,
 } from "lucide-react";
 
-export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "saved" | "profile" | "sources";
+export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "saved" | "security" | "profile" | "sources";
 
 interface SidebarProps {
   currentTab: NavTab;
@@ -30,6 +31,7 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
     { id: "opportunities", label: "Opportunities & Benefits", icon: Award, badge: matchedCount },
     { id: "deadlines", label: "Deadline Tracker", icon: Calendar, badge: deadlinesCount, section: "MANAGEMENT" },
     { id: "saved", label: "Applications & Saved", icon: Bookmark, badge: savedCount },
+    { id: "security", label: "Security & CVEs", icon: ShieldAlert },
     { id: "profile", label: "Profile & Eligibility", icon: UserCheck },
     { id: "sources", label: "Source Health", icon: Radio },
   ];
