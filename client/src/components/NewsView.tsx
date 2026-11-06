@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Article } from "@/services/api";
+import { Article, saveItem } from "@/services/api";
 import {
   ExternalLink,
   ShieldCheck,
@@ -10,15 +10,33 @@ import {
   CheckCircle,
   Share2,
   Bookmark,
+  BookmarkCheck,
 } from "lucide-react";
 
 interface NewsViewProps {
   news: Article[];
+  onRefresh?: () => void;
 }
 
-export function NewsView({ news }: NewsViewProps) {
+export function NewsView({ news, onRefresh }: NewsViewProps) {
   const [selectedTopic, setSelectedTopic] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [savedIds, setSavedIds] = useState<Set<number>>(new Set());
+  const [savingId, setSavingId] = useState<number | null>(null);
+
+  const handleSave = async (articleId: number) => {
+    if (savedIds.has(articleId) || savingId === articleId) return;
+    setSavingId(articleId);
+    try {
+      await saveItem("article", articleId);
+      setSavedIds((prev) => new Set(prev).add(articleId));
+      onRefresh?.();
+    } catch (err) {
+      console.error("Failed to save article", err);
+    } finally {
+      setSavingId(null);
+    }
+  };
 
   const topics = [
     "All",
@@ -109,6 +127,22 @@ export function NewsView({ news }: NewsViewProps) {
                   <span className="text-[11px] font-semibold text-indigo-300 bg-slate-800 px-2 py-0.5 rounded">
                     {(article.relevance_score * 100).toFixed(0)}% Relevance
                   </span>
+                  <button
+                    onClick={() => handleSave(article.id)}
+                    disabled={savedIds.has(article.id) || savingId === article.id}
+                    title={savedIds.has(article.id) ? "Saved" : "Save article"}
+                    className={`p-1 rounded transition-colors ${
+                      savedIds.has(article.id)
+                        ? "text-indigo-400 cursor-default"
+                        : "text-slate-500 hover:text-indigo-400 hover:bg-slate-800"
+                    }`}
+                  >
+                    {savedIds.has(article.id) ? (
+                      <BookmarkCheck className="w-4 h-4" />
+                    ) : (
+                      <Bookmark className="w-4 h-4" />
+                    )}
+                  </button>
                 </div>
               </div>
 

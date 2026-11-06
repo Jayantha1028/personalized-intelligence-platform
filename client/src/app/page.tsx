@@ -7,12 +7,18 @@ import {
   fetchOpportunities,
   fetchProfile,
   fetchSources,
+  fetchSavedItems,
+  fetchApplications,
+  fetchNotifications,
   syncNewsFeeds,
   DashboardStats,
   Article,
   Opportunity,
   UserProfile,
   Source,
+  SavedItem,
+  ApplicationItem,
+  NotificationListResponse,
 } from "@/services/api";
 import { Sidebar, NavTab } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
@@ -22,6 +28,8 @@ import { OpportunitiesView } from "@/components/OpportunitiesView";
 import { DeadlinesView } from "@/components/DeadlinesView";
 import { ProfileView } from "@/components/ProfileView";
 import { SourcesView } from "@/components/SourcesView";
+import { SavedAndApplicationsView } from "@/components/SavedAndApplicationsView";
+import { NotificationsDrawer } from "@/components/NotificationsDrawer";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -31,17 +39,36 @@ export default function Home() {
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
+  const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
+  const [applications, setApplications] = useState<ApplicationItem[]>([]);
+  const [notifications, setNotifications] = useState<NotificationListResponse>({
+    unread_count: 0,
+    items: [],
+  });
+  const [notificationsOpen, setNotificationsOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const loadData = async () => {
     try {
-      const [statsData, newsData, oppsData, profileData, sourcesData] = await Promise.all([
+      const [
+        statsData,
+        newsData,
+        oppsData,
+        profileData,
+        sourcesData,
+        savedData,
+        appsData,
+        notifsData,
+      ] = await Promise.all([
         fetchStats().catch(() => null),
         fetchNews().catch(() => []),
         fetchOpportunities().catch(() => []),
         fetchProfile().catch(() => null),
         fetchSources().catch(() => []),
+        fetchSavedItems().catch(() => []),
+        fetchApplications().catch(() => []),
+        fetchNotifications().catch(() => ({ unread_count: 0, items: [] })),
       ]);
 
       setStats(statsData);
@@ -49,6 +76,9 @@ export default function Home() {
       setOpportunities(oppsData);
       setProfile(profileData);
       setSources(sourcesData);
+      setSavedItems(savedData);
+      setApplications(appsData);
+      setNotifications(notifsData);
     } catch (err) {
       console.error("Error loading intelligence data", err);
     } finally {
@@ -86,6 +116,7 @@ export default function Home() {
         onTabChange={setCurrentTab}
         matchedCount={stats?.matched_opportunities}
         deadlinesCount={stats?.upcoming_deadlines_count}
+        savedCount={applications.length}
       />
 
       {/* Main Content Area */}
@@ -94,6 +125,8 @@ export default function Home() {
           profile={profile}
           onRefresh={handleRefresh}
           isRefreshing={refreshing}
+          unreadNotificationsCount={notifications.unread_count}
+          onToggleNotifications={() => setNotificationsOpen(true)}
         />
 
         <main className="flex-1 p-8 overflow-y-auto">
@@ -113,14 +146,22 @@ export default function Home() {
                 />
               )}
 
-              {currentTab === "news" && <NewsView news={news} />}
+              {currentTab === "news" && <NewsView news={news} onRefresh={loadData} />}
 
               {currentTab === "opportunities" && (
-                <OpportunitiesView opportunities={opportunities} />
+                <OpportunitiesView opportunities={opportunities} onRefresh={loadData} />
               )}
 
               {currentTab === "deadlines" && (
                 <DeadlinesView opportunities={opportunities} />
+              )}
+
+              {currentTab === "saved" && (
+                <SavedAndApplicationsView
+                  savedItems={savedItems}
+                  applications={applications}
+                  onRefresh={loadData}
+                />
               )}
 
               {currentTab === "profile" && profile && (
@@ -135,6 +176,15 @@ export default function Home() {
           )}
         </main>
       </div>
+
+      {/* Notifications Drawer */}
+      <NotificationsDrawer
+        isOpen={notificationsOpen}
+        onClose={() => setNotificationsOpen(false)}
+        notifications={notifications.items}
+        unreadCount={notifications.unread_count}
+        onRefresh={loadData}
+      />
     </div>
   );
 }

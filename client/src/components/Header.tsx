@@ -2,15 +2,23 @@
 
 import React from "react";
 import { UserProfile } from "@/services/api";
-import { Search, MapPin, GraduationCap, RefreshCw } from "lucide-react";
+import { Search, MapPin, GraduationCap, RefreshCw, Bell } from "lucide-react";
 
 interface HeaderProps {
   profile?: UserProfile | null;
   onRefresh?: () => void;
   isRefreshing?: boolean;
+  unreadNotificationsCount?: number;
+  onToggleNotifications?: () => void;
 }
 
-export function Header({ profile, onRefresh, isRefreshing = false }: HeaderProps) {
+export function Header({
+  profile,
+  onRefresh,
+  isRefreshing = false,
+  unreadNotificationsCount = 0,
+  onToggleNotifications,
+}: HeaderProps) {
   return (
     <header className="h-16 border-b border-slate-800 bg-slate-900/60 backdrop-blur px-8 flex items-center justify-between sticky top-0 z-20">
       <div className="flex items-center gap-4 flex-1 max-w-md">
@@ -34,6 +42,20 @@ export function Header({ profile, onRefresh, isRefreshing = false }: HeaderProps
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-indigo-400" : ""}`} />
             <span>Sync</span>
+          </button>
+        )}
+
+        {/* Notifications Bell */}
+        {onToggleNotifications && (
+          <button
+            onClick={onToggleNotifications}
+            className="relative p-2 text-slate-400 hover:text-slate-200 transition-colors rounded-md hover:bg-slate-800"
+            title="Alerts and notifications"
+          >
+            <Bell className="w-4 h-4" />
+            {unreadNotificationsCount > 0 && (
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+            )}
           </button>
         )}
 

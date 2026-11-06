@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Opportunity } from "@/services/api";
+import { Opportunity, trackApplication } from "@/services/api";
 import {
   Award,
   CheckCircle2,
@@ -12,15 +12,33 @@ import {
   Calendar,
   Building,
   Tag,
+  ListChecks,
 } from "lucide-react";
 
 interface OpportunitiesViewProps {
   opportunities: Opportunity[];
+  onRefresh?: () => void;
 }
 
-export function OpportunitiesView({ opportunities }: OpportunitiesViewProps) {
+export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesViewProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [selectedMatch, setSelectedMatch] = useState<string>("All");
+  const [trackedIds, setTrackedIds] = useState<Set<number>>(new Set());
+  const [trackingId, setTrackingId] = useState<number | null>(null);
+
+  const handleTrack = async (oppId: number) => {
+    if (trackedIds.has(oppId) || trackingId === oppId) return;
+    setTrackingId(oppId);
+    try {
+      await trackApplication(oppId, "interested");
+      setTrackedIds((prev) => new Set(prev).add(oppId));
+      onRefresh?.();
+    } catch (err) {
+      console.error("Failed to track application", err);
+    } finally {
+      setTrackingId(null);
+    }
+  };
 
   const categories = [
     { id: "All", label: "All Opportunities" },
@@ -193,15 +211,31 @@ export function OpportunitiesView({ opportunities }: OpportunitiesViewProps) {
                     </span>
                   </div>
 
-                  <a
-                    href={opp.official_url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-colors shadow-sm"
-                  >
-                    <span>Apply on Portal</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleTrack(opp.id)}
+                      disabled={trackedIds.has(opp.id) || trackingId === opp.id}
+                      title={trackedIds.has(opp.id) ? "Already tracking" : "Track this application"}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-medium transition-colors text-xs ${
+                        trackedIds.has(opp.id)
+                          ? "bg-slate-800 text-emerald-400 border border-emerald-800/50 cursor-default"
+                          : "bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 border border-slate-700"
+                      }`}
+                    >
+                      <ListChecks className="w-3 h-3" />
+                      {trackedIds.has(opp.id) ? "Tracking" : "Track"}
+                    </button>
+
+                    <a
+                      href={opp.official_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-colors shadow-sm text-xs"
+                    >
+                      <span>Apply on Portal</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
               </div>
             );

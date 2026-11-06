@@ -10,23 +10,26 @@ import {
   Radio,
   ShieldCheck,
   Sparkles,
+  Bookmark,
 } from "lucide-react";
 
-export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "profile" | "sources";
+export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "saved" | "profile" | "sources";
 
 interface SidebarProps {
   currentTab: NavTab;
   onTabChange: (tab: NavTab) => void;
   matchedCount?: number;
   deadlinesCount?: number;
+  savedCount?: number;
 }
 
-export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCount = 0 }: SidebarProps) {
+export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCount = 0, savedCount = 0 }: SidebarProps) {
   const navItems: { id: NavTab; label: string; icon: any; badge?: number; section?: string }[] = [
     { id: "overview", label: "Overview", icon: LayoutDashboard },
     { id: "news", label: "News Intelligence", icon: Newspaper, section: "ENGINES" },
     { id: "opportunities", label: "Opportunities & Benefits", icon: Award, badge: matchedCount },
     { id: "deadlines", label: "Deadline Tracker", icon: Calendar, badge: deadlinesCount, section: "MANAGEMENT" },
+    { id: "saved", label: "Applications & Saved", icon: Bookmark, badge: savedCount },
     { id: "profile", label: "Profile & Eligibility", icon: UserCheck },
     { id: "sources", label: "Source Health", icon: Radio },
   ];

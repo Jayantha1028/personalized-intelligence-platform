@@ -23,6 +23,11 @@ class Settings(BaseSettings):
     
     # Optional LLM Key
     GEMINI_API_KEY: str = ""
+
+    # Optional Notification Channels
+    TELEGRAM_BOT_TOKEN: str = ""
+    TELEGRAM_CHAT_ID: str = ""
+    EMAIL_NOTIFICATIONS_ENABLED: bool = False
     
     @field_validator("CORS_ORIGINS", mode="before")
     def parse_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:

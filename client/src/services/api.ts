@@ -141,8 +141,120 @@ export async function syncNewsFeeds(): Promise<any> {
   return res.json();
 }
 
+export interface SavedItem {
+  id: number;
+  item_type: string;
+  item_id: number;
+  notes?: string;
+  title: string;
+  category: string;
+  link: string;
+  created_at: string;
+}
+
+export interface ApplicationItem {
+  id: number;
+  opportunity_id: number;
+  opportunity_title: string;
+  provider: string;
+  category: string;
+  benefit_summary?: string;
+  official_url: string;
+  status: "interested" | "in_progress" | "applied" | "awarded" | "rejected";
+  applied_date?: string;
+  notes?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface NotificationItem {
+  id: number;
+  title: string;
+  message: string;
+  notification_type: string;
+  reference_type?: string;
+  reference_id?: number;
+  is_read: boolean;
+  channel: string;
+  created_at: string;
+}
+
+export interface NotificationListResponse {
+  unread_count: number;
+  items: NotificationItem[];
+}
+
 export async function fetchSources(): Promise<Source[]> {
   const res = await fetch(`${API_BASE_URL}/sources`, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to fetch sources");
   return res.json();
+}
+
+// Saved Items
+export async function fetchSavedItems(): Promise<SavedItem[]> {
+  const res = await fetch(`${API_BASE_URL}/saved-items`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch saved items");
+  return res.json();
+}
+
+export async function saveItem(item_type: "article" | "opportunity", item_id: number, notes?: string): Promise<SavedItem> {
+  const res = await fetch(`${API_BASE_URL}/saved-items`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ item_type, item_id, notes }),
+  });
+  if (!res.ok) throw new Error("Failed to save item");
+  return res.json();
+}
+
+export async function deleteSavedItem(id: number): Promise<void> {
+  await fetch(`${API_BASE_URL}/saved-items/${id}`, { method: "DELETE" });
+}
+
+// Application Tracking
+export async function fetchApplications(): Promise<ApplicationItem[]> {
+  const res = await fetch(`${API_BASE_URL}/applications`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch applications");
+  return res.json();
+}
+
+export async function trackApplication(opportunity_id: number, status: string = "interested", notes?: string): Promise<ApplicationItem> {
+  const res = await fetch(`${API_BASE_URL}/applications`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ opportunity_id, status, notes }),
+  });
+  if (!res.ok) throw new Error("Failed to track application");
+  return res.json();
+}
+
+export async function updateApplicationStatus(id: number, status: string, notes?: string): Promise<ApplicationItem> {
+  const res = await fetch(`${API_BASE_URL}/applications/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status, notes }),
+  });
+  if (!res.ok) throw new Error("Failed to update application");
+  return res.json();
+}
+
+// Notifications
+export async function fetchNotifications(): Promise<NotificationListResponse> {
+  const res = await fetch(`${API_BASE_URL}/notifications`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch notifications");
+  return res.json();
+}
+
+export async function dispatchNotifications(): Promise<any> {
+  const res = await fetch(`${API_BASE_URL}/notifications/dispatch`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to dispatch notifications");
+  return res.json();
+}
+
+export async function markNotificationRead(id: number): Promise<void> {
+  await fetch(`${API_BASE_URL}/notifications/${id}/read`, { method: "PUT" });
+}
+
+export async function markAllNotificationsRead(): Promise<void> {
+  await fetch(`${API_BASE_URL}/notifications/read-all`, { method: "PUT" });
 }
