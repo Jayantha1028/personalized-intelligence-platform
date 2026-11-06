@@ -7,6 +7,7 @@ import {
   fetchOpportunities,
   fetchProfile,
   fetchSources,
+  syncNewsFeeds,
   DashboardStats,
   Article,
   Opportunity,
@@ -60,9 +61,15 @@ export default function Home() {
     loadData();
   }, []);
 
-  const handleRefresh = () => {
+  const handleRefresh = async () => {
     setRefreshing(true);
-    loadData();
+    try {
+      await syncNewsFeeds();
+    } catch (err) {
+      console.warn("Live feed sync failed, falling back to cached records", err);
+    }
+    await loadData();
+    setRefreshing(false);
   };
 
   const handleProfileUpdated = (updated: UserProfile) => {

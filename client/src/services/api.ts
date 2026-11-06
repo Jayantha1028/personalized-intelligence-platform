@@ -135,6 +135,12 @@ export async function updateProfile(data: Partial<UserProfile>): Promise<UserPro
   return res.json();
 }
 
+export async function syncNewsFeeds(): Promise<any> {
+  const res = await fetch(`${API_BASE_URL}/news/sync?max_items=5`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to trigger sync");
+  return res.json();
+}
+
 export async function fetchSources(): Promise<Source[]> {
   const res = await fetch(`${API_BASE_URL}/sources`, { cache: "no-store" });
   if (!res.ok) throw new Error("Failed to fetch sources");

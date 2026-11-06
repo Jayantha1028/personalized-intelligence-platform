@@ -1,4 +1,4 @@
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -6,6 +6,8 @@ from sqlalchemy import select, desc
 from pydantic import BaseModel, ConfigDict
 from app.database.session import get_db
 from app.database.models import Article, Source
+from app.ingestion.pipeline import IngestionPipeline
+from app.processing.cleaner import extract_clean_article, normalize_url
 
 router = APIRouter(prefix="/news")
 
@@ -27,6 +29,40 @@ class ArticleResponse(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ExtractUrlRequest(BaseModel):
+    url: str
+
+
+class SyncNewsResponse(BaseModel):
+    sources_processed: int
+    total_new_articles: int
+    failed_sources: int
+    details: List[Dict[str, Any]]
+
+
+@router.post("/sync", response_model=SyncNewsResponse)
+async def sync_news_feeds(
+    max_items: int = Query(5, ge=1, le=20),
+    db: AsyncSession = Depends(get_db),
+):
+    """Trigger on-demand feed fetch across all active news and scheme sources."""
+    pipeline = IngestionPipeline()
+    result = await pipeline.run_all_sources(db=db, max_items_per_source=max_items)
+    return result
+
+
+@router.post("/extract")
+async def extract_url(data: ExtractUrlRequest):
+    """Extract clean distraction-free text from any URL using Trafilatura."""
+    clean_url = normalize_url(data.url)
+    text = await extract_clean_article(clean_url)
+    return {
+        "url": clean_url,
+        "characters_extracted": len(text),
+        "preview": text[:500] if text else "",
+    }
 
 
 @router.get("", response_model=List[ArticleResponse])
