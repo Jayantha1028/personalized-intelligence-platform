@@ -78,7 +78,7 @@ export function AcademicSimulatorWidget({
     <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-indigo-600 flex items-center justify-center text-white">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-blue-600 flex items-center justify-center text-white">
             <GraduationCap className="w-5 h-5" />
           </div>
           <div>
@@ -101,7 +101,7 @@ export function AcademicSimulatorWidget({
 
       {loading ? (
         <div className="text-xs text-slate-400 flex items-center gap-2 py-4">
-          <Loader2 className="w-4 h-4 animate-spin text-indigo-500" />
+          <Loader2 className="w-4 h-4 animate-spin text-sky-500" />
           <span>Loading institutional student registry...</span>
         </div>
       ) : (
@@ -117,7 +117,7 @@ export function AcademicSimulatorWidget({
                   onClick={() => setSelectedStudentId(s.id)}
                   className={`p-3 rounded-xl border text-left text-xs transition-all ${
                     selectedStudentId === s.id
-                      ? "bg-indigo-950/70 border-indigo-500 text-white shadow-md shadow-indigo-600/20"
+                      ? "bg-blue-950/70 border-blue-500 text-white shadow-md shadow-blue-600/20"
                       : "bg-slate-950/80 border-slate-800 text-slate-400 hover:border-slate-700"
                   }`}
                 >
@@ -149,7 +149,7 @@ export function AcademicSimulatorWidget({
               <button
                 onClick={handleSync}
                 disabled={syncing}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium text-xs shadow-md shadow-indigo-600/30 transition-all shrink-0"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium text-xs shadow-md shadow-blue-600/30 transition-all shrink-0"
               >
                 {syncing ? (
                   <>

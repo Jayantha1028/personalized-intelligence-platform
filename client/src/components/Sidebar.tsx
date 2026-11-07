@@ -11,10 +11,10 @@ import {
   ShieldCheck,
   Sparkles,
   Bookmark,
-  ShieldAlert,
+  CheckSquare,
 } from "lucide-react";
 
-export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "saved" | "security" | "profile" | "sources";
+export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "saved" | "tasks" | "profile" | "sources";
 
 interface SidebarProps {
   currentTab: NavTab;
@@ -31,7 +31,7 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
     { id: "opportunities", label: "Opportunities & Benefits", icon: Award, badge: matchedCount },
     { id: "deadlines", label: "Deadline Tracker", icon: Calendar, badge: deadlinesCount, section: "MANAGEMENT" },
     { id: "saved", label: "Applications & Saved", icon: Bookmark, badge: savedCount },
-    { id: "security", label: "Security & CVEs", icon: ShieldAlert },
+    { id: "tasks", label: "Tech Blogs & Tasks", icon: CheckSquare },
     { id: "profile", label: "Profile & Eligibility", icon: UserCheck },
     { id: "sources", label: "Source Health", icon: Radio },
   ];
@@ -42,7 +42,7 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
         {/* Brand Header */}
         <div className="p-6 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center shadow-lg shadow-indigo-500/25">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/25">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
@@ -69,7 +69,7 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
                   onClick={() => onTabChange(item.id)}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/30"
+                      ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30"
                       : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
                   }`}
                 >
@@ -82,7 +82,7 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
                       className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
                         isActive
                           ? "bg-white/20 text-white"
-                          : "bg-indigo-950 text-indigo-400 border border-indigo-800/60"
+                          : "bg-blue-950/80 text-sky-400 border border-blue-800/60"
                       }`}
                     >
                       {item.badge}

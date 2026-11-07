@@ -65,9 +65,20 @@ def calculate_relevance_score(
     # 5. Topic importance (T)
     T = 0.8 if any(k in text_corpus for k in ["policy", "semiconductor", "ai", "cloud", "security"]) else 0.5
 
-    # 6. Personal Impact (P)
-    P = 0.9 if ("india" in text_corpus or "karnataka" in text_corpus or "student" in text_corpus) else 0.5
+    # 6. Personal Impact & Local Growth (P)
+    P = 0.95 if ("karnataka" in text_corpus or "bengaluru" in text_corpus) else (
+        0.85 if ("india" in text_corpus or "student" in text_corpus) else 0.5
+    )
 
-    # Composite Score
-    score = (0.35 * R) + (0.20 * Q) + (0.15 * A) + (0.10 * F) + (0.10 * T) + (0.10 * P)
+    # 7. Growth & Career Actionability Bonus (G)
+    growth_keywords = [
+        "internship", "grant", "fellowship", "scholarship", "certification",
+        "stipend", "hackathon", "seed", "voucher", "karnataka", "bengaluru",
+        "iisc", "hiring", "open-source", "research", "mentor"
+    ]
+    growth_hits = sum(1 for kw in growth_keywords if kw in text_corpus)
+    growth_bonus = min(0.12, growth_hits * 0.03)
+
+    # Composite Score emphasizing personal & career growth
+    score = (0.30 * R) + (0.20 * Q) + (0.15 * A) + (0.10 * F) + (0.10 * T) + (0.15 * P) + growth_bonus
     return round(min(1.0, max(0.0, score)), 2)

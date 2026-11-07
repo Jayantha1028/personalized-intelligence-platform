@@ -76,9 +76,9 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
 
         <button
           onClick={() => setCircularModalOpen(true)}
-          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-indigo-500/40 text-indigo-300 font-medium text-xs shadow-sm hover:border-indigo-400 transition-all shrink-0"
+          className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 border border-blue-500/40 text-sky-300 font-medium text-xs shadow-sm hover:border-blue-400 transition-all shrink-0"
         >
-          <FileText className="w-4 h-4 text-indigo-400" />
+          <FileText className="w-4 h-4 text-sky-400" />
           <span>Analyze Scheme Circular</span>
         </button>
       </div>
@@ -93,7 +93,7 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
               onClick={() => setSelectedCategory(cat.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                 selectedCategory === cat.id
-                  ? "bg-indigo-600 text-white shadow-sm shadow-indigo-600/30"
+                  ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30"
                   : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
               }`}
             >
@@ -243,7 +243,7 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
                       href={opp.official_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-colors shadow-sm text-xs"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors shadow-sm text-xs"
                     >
                       <span>Apply on Portal</span>
                       <ExternalLink className="w-3 h-3" />

@@ -1,6 +1,7 @@
 """API Router Configuration"""
 from fastapi import APIRouter
 from app.api.health import router as health_router
+from app.api.auth import router as auth_router
 from app.api.profile import router as profile_router
 from app.api.news import router as news_router
 from app.api.opportunities import router as opp_router
@@ -15,6 +16,7 @@ from app.api.academic_records import router as academic_router
 
 api_router = APIRouter()
 api_router.include_router(health_router, tags=["Health"])
+api_router.include_router(auth_router, tags=["Authentication & User Management"])
 api_router.include_router(dashboard_router, tags=["Dashboard"])
 api_router.include_router(news_router, tags=["News Intelligence"])
 api_router.include_router(opp_router, tags=["Opportunity Intelligence"])

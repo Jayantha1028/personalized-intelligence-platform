@@ -42,6 +42,36 @@ async def test_news_listing():
 
 
 @pytest.mark.asyncio
+async def test_article_feedback_and_feed_tuning():
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        # Get first article
+        res = await ac.get("/api/news")
+        articles = res.json()
+        assert len(articles) > 0
+        art_id = articles[0]["id"]
+
+        # Like the article
+        like_resp = await ac.post(f"/api/news/{art_id}/feedback", json={"feedback": "like"})
+        assert like_resp.status_code == 200
+        like_data = like_resp.json()
+        assert like_data["feedback"] == "like"
+        assert "topic_weight" in like_data
+
+        # Check feedback summary
+        summary_resp = await ac.get("/api/news/feedback/summary")
+        assert summary_resp.status_code == 200
+        summary_data = summary_resp.json()
+        assert summary_data["total_likes"] >= 1
+        assert str(art_id) in summary_data["feedbacks"] or art_id in summary_data["feedbacks"]
+
+        # Dislike the article
+        dislike_resp = await ac.post(f"/api/news/{art_id}/feedback", json={"feedback": "dislike"})
+        assert dislike_resp.status_code == 200
+        assert dislike_resp.json()["feedback"] == "dislike"
+
+
+
+@pytest.mark.asyncio
 async def test_opportunities_listing():
     async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
         response = await ac.get("/api/opportunities")

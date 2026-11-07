@@ -11,6 +11,7 @@ import {
   fetchApplications,
   fetchNotifications,
   syncNewsFeeds,
+  fetchCurrentUser,
   DashboardStats,
   Article,
   Opportunity,
@@ -19,6 +20,8 @@ import {
   SavedItem,
   ApplicationItem,
   NotificationListResponse,
+  AuthUser,
+  AuthResponse,
 } from "@/services/api";
 import { Sidebar, NavTab } from "@/components/Sidebar";
 import { Header } from "@/components/Header";
@@ -30,7 +33,9 @@ import { ProfileView } from "@/components/ProfileView";
 import { SourcesView } from "@/components/SourcesView";
 import { SavedAndApplicationsView } from "@/components/SavedAndApplicationsView";
 import { NotificationsDrawer } from "@/components/NotificationsDrawer";
-import { SecurityAdvisoriesView } from "@/components/SecurityAdvisoriesView";
+import { TechBlogsAndTasksView } from "@/components/TechBlogsAndTasksView";
+import { AuthModal } from "@/components/AuthModal";
+import { AccountDetailsModal } from "@/components/AccountDetailsModal";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -39,6 +44,7 @@ export default function Home() {
   const [news, setNews] = useState<Article[]>([]);
   const [opportunities, setOpportunities] = useState<Opportunity[]>([]);
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [authUser, setAuthUser] = useState<AuthUser | null>(null);
   const [sources, setSources] = useState<Source[]>([]);
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
   const [applications, setApplications] = useState<ApplicationItem[]>([]);
@@ -47,6 +53,9 @@ export default function Home() {
     items: [],
   });
   const [notificationsOpen, setNotificationsOpen] = useState<boolean>(false);
+  const [authModalOpen, setAuthModalOpen] = useState<boolean>(false);
+  const [authModalTab, setAuthModalTab] = useState<"signin" | "register">("signin");
+  const [accountModalOpen, setAccountModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -61,15 +70,17 @@ export default function Home() {
         savedData,
         appsData,
         notifsData,
+        sessionData,
       ] = await Promise.all([
         fetchStats().catch(() => null),
-        fetchNews().catch(() => []),
+        fetchNews("All", 50).catch(() => []),
         fetchOpportunities().catch(() => []),
         fetchProfile().catch(() => null),
         fetchSources().catch(() => []),
         fetchSavedItems().catch(() => []),
         fetchApplications().catch(() => []),
         fetchNotifications().catch(() => ({ unread_count: 0, items: [] })),
+        fetchCurrentUser().catch(() => null),
       ]);
 
       setStats(statsData);
@@ -80,6 +91,9 @@ export default function Home() {
       setSavedItems(savedData);
       setApplications(appsData);
       setNotifications(notifsData);
+      if (sessionData && sessionData.user) {
+        setAuthUser(sessionData.user);
+      }
     } catch (err) {
       console.error("Error loading intelligence data", err);
     } finally {
@@ -109,6 +123,19 @@ export default function Home() {
     loadData();
   };
 
+  const handleAuthSuccess = (res: AuthResponse) => {
+    setAuthUser(res.user);
+    if (res.profile) {
+      setProfile((prev) => (prev ? { ...prev, ...res.profile } : (res.profile as any)));
+    }
+    loadData();
+  };
+
+  const handleSignOut = () => {
+    setAuthUser(null);
+    loadData();
+  };
+
   return (
     <div className="flex min-h-screen bg-slate-950 text-slate-100 font-sans antialiased">
       {/* Navigation Sidebar */}
@@ -124,16 +151,22 @@ export default function Home() {
       <div className="flex-1 flex flex-col min-w-0">
         <Header
           profile={profile}
+          authUser={authUser}
           onRefresh={handleRefresh}
           isRefreshing={refreshing}
           unreadNotificationsCount={notifications.unread_count}
           onToggleNotifications={() => setNotificationsOpen(true)}
+          onOpenAuthModal={(tab) => {
+            setAuthModalTab(tab || "signin");
+            setAuthModalOpen(true);
+          }}
+          onOpenAccountModal={() => setAccountModalOpen(true)}
         />
 
         <main className="flex-1 p-8 overflow-y-auto">
           {loading ? (
             <div className="h-96 flex flex-col items-center justify-center gap-3 text-slate-400">
-              <Loader2 className="w-8 h-8 animate-spin text-indigo-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
               <p className="text-sm font-medium">Connecting to Intelligence Engine...</p>
             </div>
           ) : (
@@ -165,7 +198,7 @@ export default function Home() {
                 />
               )}
 
-              {currentTab === "security" && <SecurityAdvisoriesView />}
+              {currentTab === "tasks" && <TechBlogsAndTasksView />}
 
               {currentTab === "profile" && profile && (
                 <ProfileView
@@ -187,6 +220,28 @@ export default function Home() {
         notifications={notifications.items}
         unreadCount={notifications.unread_count}
         onRefresh={loadData}
+      />
+
+      {/* Auth Modal (Sign In / Register / Quick Demo Logins) */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+        initialTab={authModalTab}
+      />
+
+      {/* Account Details & Session Modal */}
+      <AccountDetailsModal
+        isOpen={accountModalOpen}
+        onClose={() => setAccountModalOpen(false)}
+        profile={profile}
+        authUser={authUser}
+        onNavigateToProfile={() => setCurrentTab("profile")}
+        onOpenSwitchAccount={() => {
+          setAuthModalTab("signin");
+          setAuthModalOpen(true);
+        }}
+        onSignOut={handleSignOut}
       />
     </div>
   );

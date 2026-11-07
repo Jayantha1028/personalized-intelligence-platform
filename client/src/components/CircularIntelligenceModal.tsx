@@ -85,7 +85,7 @@ export function CircularIntelligenceModal({
         {/* Modal Header */}
         <div className="p-6 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-indigo-500 flex items-center justify-center text-white">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center text-white">
               <FileText className="w-5 h-5" />
             </div>
             <div>
@@ -119,7 +119,7 @@ export function CircularIntelligenceModal({
                   onClick={() => handleSelectSample(s)}
                   className={`text-left p-3 rounded-xl border text-xs transition-all ${
                     selectedSampleId === s.id
-                      ? "bg-indigo-950/60 border-indigo-500/80 text-white shadow-sm"
+                      ? "bg-blue-950/60 border-blue-500/80 text-white shadow-sm"
                       : "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700"
                   }`}
                 >
@@ -141,7 +141,7 @@ export function CircularIntelligenceModal({
                   type="text"
                   value={inputTitle}
                   onChange={(e) => setInputTitle(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
                 />
               </div>
               <div>
@@ -152,7 +152,7 @@ export function CircularIntelligenceModal({
                   type="text"
                   value={inputProvider}
                   onChange={(e) => setInputProvider(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
                 />
               </div>
             </div>
@@ -166,7 +166,7 @@ export function CircularIntelligenceModal({
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Paste scheme notification, guidelines, or circular text here..."
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 font-mono focus:outline-none focus:border-indigo-500 leading-relaxed"
+                className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-200 font-mono focus:outline-none focus:border-blue-500 leading-relaxed"
               />
             </div>
 
@@ -174,7 +174,7 @@ export function CircularIntelligenceModal({
               <button
                 onClick={handleAnalyze}
                 disabled={loading || !inputText.trim()}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-medium text-xs shadow-lg shadow-indigo-600/30 transition-all"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium text-xs shadow-lg shadow-blue-600/30 transition-all"
               >
                 {loading ? (
                   <>
@@ -232,7 +232,7 @@ export function CircularIntelligenceModal({
                     Contact Email
                   </span>
                   <div className="flex items-center gap-1.5 mt-1 text-slate-300 truncate">
-                    <Mail className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                    <Mail className="w-3.5 h-3.5 text-sky-400 shrink-0" />
                     <span className="truncate">
                       {parsedResult.extracted_entities.emails[0] || "See official portal"}
                     </span>
@@ -252,7 +252,7 @@ export function CircularIntelligenceModal({
                         key={idx}
                         className="bg-slate-900/80 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-200 flex items-start gap-2"
                       >
-                        <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 className="w-3.5 h-3.5 text-sky-400 shrink-0 mt-0.5" />
                         <span>{sig}</span>
                       </div>
                     ))}

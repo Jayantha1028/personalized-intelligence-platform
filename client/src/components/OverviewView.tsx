@@ -12,6 +12,7 @@ import {
   ArrowRight,
   Sparkles,
   AlertCircle,
+  Rocket,
 } from "lucide-react";
 
 interface OverviewViewProps {
@@ -22,16 +23,16 @@ interface OverviewViewProps {
 }
 
 export function OverviewView({ stats, news, opportunities, onNavigate }: OverviewViewProps) {
-  const topNews = news.slice(0, 3);
+  const topNews = news.slice(0, 5);
   const matchedOpps = opportunities.filter((o) => o.match_status === "MATCHED").slice(0, 3);
 
   return (
     <div className="space-y-8">
       {/* Top Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-indigo-950 via-slate-900 to-slate-900 p-7 border border-indigo-900/40 shadow-xl">
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950/30 to-slate-900 p-7 border border-slate-800 shadow-xl">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-indigo-500/20 text-indigo-300 text-xs font-semibold mb-3 border border-indigo-500/30">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-500/20 text-sky-300 text-xs font-semibold mb-3 border border-blue-500/30">
+            <Sparkles className="w-3.5 h-3.5 text-sky-400" />
             <span>Dual-Engine Daily Intelligence</span>
           </div>
           <h2 className="text-2xl font-bold text-white tracking-tight">
@@ -65,7 +66,7 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
           </div>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white">{stats?.matched_opportunities || 0}</span>
-            <span className="text-xs text-indigo-400 font-medium">
+            <span className="text-xs text-sky-400 font-medium">
               {stats?.potential_matches || 0} potential
             </span>
           </div>
@@ -85,7 +86,7 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
         <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-5 shadow-sm hover:border-slate-700 transition-colors">
           <div className="flex items-center justify-between text-slate-400">
             <span className="text-xs font-medium uppercase tracking-wider">Active Feeds</span>
-            <ShieldCheck className="w-4 h-4 text-indigo-400" />
+            <ShieldCheck className="w-4 h-4 text-sky-400" />
           </div>
           <div className="mt-3 flex items-baseline gap-2">
             <span className="text-2xl font-bold text-white">{stats?.active_sources_count || 5}</span>
@@ -100,12 +101,12 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
         <div className="lg:col-span-7 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Newspaper className="w-4 h-4 text-indigo-400" />
+              <Newspaper className="w-4 h-4 text-sky-400" />
               <h3 className="font-semibold text-slate-100 text-base">Curated News Intelligence</h3>
             </div>
             <button
               onClick={() => onNavigate("news")}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1 transition-colors"
+              className="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1 transition-colors"
             >
               <span>View all</span>
               <ArrowRight className="w-3.5 h-3.5" />
@@ -121,7 +122,7 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="flex items-center gap-2 mb-1.5">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-indigo-950 text-indigo-300 border border-indigo-800/50">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-sky-300 border border-slate-700">
                         {article.topic}
                       </span>
                       <span className="text-[11px] text-slate-400">
@@ -136,7 +137,7 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
                       href={article.canonical_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-base font-semibold text-slate-100 hover:text-indigo-400 transition-colors flex items-center gap-1.5"
+                      className="text-base font-semibold text-slate-100 hover:text-sky-400 transition-colors flex items-center gap-1.5"
                     >
                       <span>{article.title}</span>
                       <ExternalLink className="w-3.5 h-3.5 text-slate-500 shrink-0" />
@@ -145,21 +146,34 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
                 </div>
 
                 {/* 3 bullet factual summary */}
-                <ul className="space-y-1.5 text-xs text-slate-300 pl-4 list-disc marker:text-indigo-400">
+                <ul className="space-y-1.5 text-xs text-slate-300 pl-4 list-disc marker:text-sky-400">
                   {article.summary_bullets.map((b, i) => (
                     <li key={i} className="leading-relaxed">{b}</li>
                   ))}
                 </ul>
 
-                {/* Personal Impact */}
+                {/* Growth Impact */}
                 {article.personal_impact && (
-                  <div className="bg-indigo-950/40 border border-indigo-900/50 rounded-lg p-3 text-xs text-indigo-200">
-                    <span className="font-semibold text-indigo-300">Why it matters to you: </span>
-                    {article.personal_impact}
+                  <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-lg p-3 text-xs text-slate-200 flex items-start gap-2 shadow-inner">
+                    <Rocket className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold text-emerald-300">Growth Impact: </span>
+                      {article.personal_impact}
+                    </div>
                   </div>
                 )}
               </div>
             ))}
+
+            {news.length > 5 && (
+              <button
+                onClick={() => onNavigate("news")}
+                className="w-full py-3 px-4 rounded-xl bg-slate-900/80 hover:bg-slate-800/90 border border-slate-800 hover:border-blue-500/40 text-xs font-semibold text-sky-300 hover:text-white flex items-center justify-center gap-2 transition-all shadow-sm group"
+              >
+                <span>Browse all {news.length} intelligence stories in News Section</span>
+                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </button>
+            )}
           </div>
         </div>
 
@@ -218,7 +232,7 @@ export function OverviewView({ stats, news, opportunities, onNavigate }: Overvie
                       href={opp.official_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-indigo-400 hover:text-indigo-300 font-medium flex items-center gap-1"
+                      className="text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1"
                     >
                       <span>Apply Official</span>
                       <ExternalLink className="w-3 h-3" />

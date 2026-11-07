@@ -8,9 +8,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
 from pydantic import BaseModel, ConfigDict
 from app.database.session import get_db
-from app.database.models import Article, Source, UserProfile, UserInterest
+from app.database.models import Article, Source, UserProfile, UserInterest, ArticleFeedback, User
+from app.auth.security import get_current_user
 from app.ingestion.pipeline import IngestionPipeline
-from app.processing.cleaner import extract_clean_article, normalize_url, normalize_title, DEFAULT_HEADERS
+from app.processing.cleaner import extract_clean_article, normalize_url, normalize_title, is_english_content, DEFAULT_HEADERS
 from app.processing.deduplicator import check_url_exists, find_or_create_cluster
 from app.news_engine.summarizer import HybridSummarizer
 from app.news_engine.relevance import calculate_relevance_score
@@ -33,8 +34,23 @@ class ArticleResponse(BaseModel):
     relevance_score: float
     is_verified: bool
     created_at: datetime
+    user_feedback: Optional[str] = None
+    dynamic_relevance: Optional[float] = None
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ArticleFeedbackRequest(BaseModel):
+    feedback: str  # "like", "dislike", "neutral"
+
+
+class FeedbackSummaryResponse(BaseModel):
+    feedbacks: Dict[int, str]
+    topic_weights: Dict[str, float]
+    total_likes: int
+    total_dislikes: int
+    boosted_topics: List[str]
+    deprioritized_topics: List[str]
 
 
 class ExtractUrlRequest(BaseModel):
@@ -233,14 +249,33 @@ async def scrape_and_ingest_url(
 async def list_news(
     topic: Optional[str] = Query(None, description="Filter by topic (e.g. AI, Cloud, Policy, Cyber)"),
     min_relevance: float = Query(0.0, description="Minimum relevance score (0.0 to 1.0)"),
-    limit: int = Query(30, ge=1, le=100),
+    limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
+    sort_by: Optional[str] = Query("relevance", description="Sort order: relevance, date, or quality"),
+    current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Retrieve personalized news feed sorted by relevance and publication date."""
+    """Retrieve personalized news feed dynamically tuned by user likes, dislikes, and topic weights."""
+    # 1. Fetch user feedbacks
+    fb_stmt = select(ArticleFeedback).where(ArticleFeedback.user_id == current_user.id)
+    fb_rows = (await db.execute(fb_stmt)).scalars().all()
+    feedbacks_map = {f.article_id: f.feedback for f in fb_rows}
+
+    # 2. Fetch user topic interest weights
+    int_stmt = select(UserInterest).where(UserInterest.user_id == current_user.id)
+    int_rows = (await db.execute(int_stmt)).scalars().all()
+    weights_map = {i.topic.strip().lower(): i.weight for i in int_rows}
+
+    if sort_by == "date":
+        order_clauses = [desc(Article.published_at), desc(Article.relevance_score)]
+    elif sort_by == "quality":
+        order_clauses = [desc(Article.quality_score), desc(Article.relevance_score)]
+    else:
+        order_clauses = [desc(Article.relevance_score), desc(Article.published_at)]
+
     query = select(Article, Source.name.label("source_name")).join(
         Source, Article.source_id == Source.id, isouter=True
-    ).order_by(desc(Article.relevance_score), desc(Article.published_at))
+    ).order_by(*order_clauses)
 
     if topic and topic.lower() != "all":
         query = query.where(Article.topic.ilike(f"%{topic}%"))
@@ -254,6 +289,22 @@ async def list_news(
 
     articles = []
     for article, source_name in rows:
+        if not is_english_content(article.title):
+            continue
+
+        user_fb = feedbacks_map.get(article.id)
+        topic_key = (article.topic or "").strip().lower()
+        topic_multiplier = weights_map.get(topic_key, 1.0)
+
+        # Dynamic relevance score calculation
+        dyn_score = article.relevance_score * topic_multiplier
+        if user_fb == "like":
+            dyn_score += 0.20
+        elif user_fb == "dislike":
+            dyn_score -= 0.50
+
+        dyn_score = round(min(1.0, max(0.05, dyn_score)), 2)
+
         articles.append(
             ArticleResponse(
                 id=article.id,
@@ -270,9 +321,152 @@ async def list_news(
                 relevance_score=article.relevance_score,
                 is_verified=article.is_verified,
                 created_at=article.created_at,
+                user_feedback=user_fb,
+                dynamic_relevance=dyn_score,
             )
         )
+
+    # If sorted by relevance, dynamically sort with user feedback and topic weights
+    if sort_by == "relevance":
+        articles.sort(key=lambda a: (a.dynamic_relevance or 0.0, a.relevance_score), reverse=True)
+
     return articles
+
+
+@router.post("/{article_id}/feedback")
+async def record_article_feedback(
+    article_id: int,
+    data: ArticleFeedbackRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Like or dislike an article to dynamically adjust personal feed recommendations."""
+    action = data.feedback.lower()
+    if action not in ["like", "dislike", "neutral"]:
+        raise HTTPException(status_code=400, detail="Feedback must be 'like', 'dislike', or 'neutral'")
+
+    # 1. Verify article exists
+    art_stmt = select(Article).where(Article.id == article_id)
+    art_res = await db.execute(art_stmt)
+    article = art_res.scalars().first()
+    if not article:
+        raise HTTPException(status_code=404, detail="Article not found")
+
+    # 2. Upsert feedback record
+    fb_stmt = select(ArticleFeedback).where(
+        ArticleFeedback.user_id == current_user.id,
+        ArticleFeedback.article_id == article_id,
+    )
+    fb_res = await db.execute(fb_stmt)
+    fb = fb_res.scalars().first()
+
+    if action == "neutral":
+        if fb:
+            await db.delete(fb)
+    else:
+        if fb:
+            fb.feedback = action
+        else:
+            fb = ArticleFeedback(
+                user_id=current_user.id,
+                article_id=article_id,
+                feedback=action,
+            )
+            db.add(fb)
+
+    # 3. Dynamically adjust user interest weight for this topic
+    topic_clean = (article.topic or "Technology").strip()
+    interest_stmt = select(UserInterest).where(
+        UserInterest.user_id == current_user.id,
+        UserInterest.topic.ilike(topic_clean),
+    )
+    interest_res = await db.execute(interest_stmt)
+    user_interest = interest_res.scalars().first()
+
+    base_weight = user_interest.weight if user_interest else 1.0
+    if action == "like":
+        new_weight = min(2.5, round(base_weight + 0.25, 2))
+    elif action == "dislike":
+        new_weight = max(0.15, round(base_weight - 0.35, 2))
+    else:  # neutral
+        new_weight = 1.0
+
+    if user_interest:
+        user_interest.weight = new_weight
+    else:
+        user_interest = UserInterest(
+            user_id=current_user.id,
+            topic=topic_clean,
+            weight=new_weight,
+        )
+        db.add(user_interest)
+
+    await db.commit()
+
+    # Fetch all user topic weights for dynamic response
+    all_interests_stmt = select(UserInterest).where(UserInterest.user_id == current_user.id)
+    all_interests = (await db.execute(all_interests_stmt)).scalars().all()
+    topic_weights = {i.topic: round(i.weight, 2) for i in all_interests}
+
+    return {
+        "article_id": article_id,
+        "feedback": action if action != "neutral" else None,
+        "topic": topic_clean,
+        "topic_weight": new_weight,
+        "active_weights": topic_weights,
+        "message": f"Feed updated: {topic_clean} is now boosted to {new_weight}x"
+        if action == "like"
+        else (f"Feed updated: {topic_clean} de-prioritized to {new_weight}x" if action == "dislike" else "Feedback reset"),
+    }
+
+
+@router.get("/feedback/summary", response_model=FeedbackSummaryResponse)
+async def get_feedback_summary(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Retrieve all liked and disliked articles and active topic affinity weights."""
+    fb_stmt = select(ArticleFeedback).where(ArticleFeedback.user_id == current_user.id)
+    feedbacks_rows = (await db.execute(fb_stmt)).scalars().all()
+    feedbacks_map = {f.article_id: f.feedback for f in feedbacks_rows}
+
+    int_stmt = select(UserInterest).where(UserInterest.user_id == current_user.id)
+    interest_rows = (await db.execute(int_stmt)).scalars().all()
+    weights_map = {i.topic: round(i.weight, 2) for i in interest_rows}
+
+    total_likes = sum(1 for v in feedbacks_map.values() if v == "like")
+    total_dislikes = sum(1 for v in feedbacks_map.values() if v == "dislike")
+    boosted = [t for t, w in weights_map.items() if w > 1.0]
+    deprioritized = [t for t, w in weights_map.items() if w < 1.0]
+
+    return FeedbackSummaryResponse(
+        feedbacks=feedbacks_map,
+        topic_weights=weights_map,
+        total_likes=total_likes,
+        total_dislikes=total_dislikes,
+        boosted_topics=boosted,
+        deprioritized_topics=deprioritized,
+    )
+
+
+@router.post("/feedback/reset")
+async def reset_feed_tuning(
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Reset all like/dislike feedback and restore baseline topic weights."""
+    del_fb = select(ArticleFeedback).where(ArticleFeedback.user_id == current_user.id)
+    fb_rows = (await db.execute(del_fb)).scalars().all()
+    for f in fb_rows:
+        await db.delete(f)
+
+    del_int = select(UserInterest).where(UserInterest.user_id == current_user.id)
+    int_rows = (await db.execute(del_int)).scalars().all()
+    for i in int_rows:
+        i.weight = 1.0
+
+    await db.commit()
+    return {"message": "Feed tuning reset to baseline default."}
 
 
 @router.get("/{article_id}", response_model=ArticleResponse)

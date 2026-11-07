@@ -20,6 +20,18 @@ PUBLISHER_SUFFIX_REGEX = re.compile(
     re.IGNORECASE
 )
 
+# Non-English / Devanagari script detection
+DEVANAGARI_REGEX = re.compile(r"[\u0900-\u097F]")
+
+
+def is_english_content(text: str) -> bool:
+    """Check if content is in English and does not contain Hindi/Devanagari script."""
+    if not text:
+        return True
+    if DEVANAGARI_REGEX.search(text):
+        return False
+    return True
+
 
 def normalize_url(url: str) -> str:
     """Strip marketing query parameters, fragments, and trailing slashes."""

@@ -108,7 +108,7 @@ export function SecurityAdvisoriesView() {
                     ? "bg-rose-600 text-white shadow-sm shadow-rose-600/30"
                     : sev === "HIGH"
                     ? "bg-orange-600 text-white shadow-sm shadow-orange-600/30"
-                    : "bg-indigo-600 text-white shadow-sm shadow-indigo-600/30"
+                    : "bg-blue-600 text-white shadow-sm shadow-blue-600/30"
                   : "bg-slate-900 text-slate-400 hover:text-slate-200 border border-slate-800"
               }`}
             >
@@ -125,7 +125,7 @@ export function SecurityAdvisoriesView() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Filter by CVE or package..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-8 pr-3 py-1.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500"
             />
           </div>
           <button

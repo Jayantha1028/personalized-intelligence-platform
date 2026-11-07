@@ -18,6 +18,7 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(255), unique=True, index=True, nullable=False)
     hashed_password: Mapped[str] = mapped_column(String(255), nullable=False)
     full_name: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    role: Mapped[str] = mapped_column(String(50), default="STUDENT")
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
@@ -44,6 +45,8 @@ class UserProfile(Base):
     academic_year: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)  # 1, 2, 3, 4
     annual_income: Mapped[Optional[float]] = mapped_column(Float, nullable=True)  # For need-based scholarships
     age: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    phone: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
+    headline: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     skills: Mapped[Optional[List[str]]] = mapped_column(JSON, default=list)
     preferences: Mapped[Optional[Dict[str, Any]]] = mapped_column(JSON, default=dict)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
@@ -267,3 +270,18 @@ class Notification(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
 
     user: Mapped["User"] = relationship("User", back_populates="notifications")
+
+
+class ArticleFeedback(Base):
+    __tablename__ = "article_feedbacks"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    article_id: Mapped[int] = mapped_column(ForeignKey("articles.id", ondelete="CASCADE"), nullable=False)
+    feedback: Mapped[str] = mapped_column(String(20), nullable=False)  # "like", "dislike", "neutral"
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+
+    user: Mapped["User"] = relationship("User")
+    article: Mapped["Article"] = relationship("Article")
+

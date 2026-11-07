@@ -55,7 +55,7 @@ export function SavedAndApplicationsView({
       case "awarded":
         return "bg-emerald-950 text-emerald-300 border-emerald-800/60";
       case "applied":
-        return "bg-indigo-950 text-indigo-300 border-indigo-800/60";
+        return "bg-blue-950/60 text-sky-300 border-blue-800/60";
       case "in_progress":
         return "bg-amber-950 text-amber-300 border-amber-800/60";
       default:
@@ -80,7 +80,7 @@ export function SavedAndApplicationsView({
             onClick={() => setActiveSubTab("applications")}
             className={`px-3 py-1.5 rounded-md font-medium transition-all ${
               activeSubTab === "applications"
-                ? "bg-indigo-600 text-white shadow-sm"
+                ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -90,7 +90,7 @@ export function SavedAndApplicationsView({
             onClick={() => setActiveSubTab("bookmarks")}
             className={`px-3 py-1.5 rounded-md font-medium transition-all ${
               activeSubTab === "bookmarks"
-                ? "bg-indigo-600 text-white shadow-sm"
+                ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -150,7 +150,7 @@ export function SavedAndApplicationsView({
                       <select
                         value={app.status}
                         onChange={(e) => handleStatusChange(app.id, e.target.value)}
-                        className="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] text-slate-200 focus:outline-none focus:border-indigo-500"
+                        className="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] text-slate-200 focus:outline-none focus:border-blue-500"
                       >
                         <option value="interested">Interested</option>
                         <option value="in_progress">In Progress</option>
@@ -164,7 +164,7 @@ export function SavedAndApplicationsView({
                       href={app.official_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 font-medium"
+                      className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 font-medium"
                     >
                       <span>Portal</span>
                       <ExternalLink className="w-3 h-3" />
@@ -191,7 +191,7 @@ export function SavedAndApplicationsView({
                 className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 flex items-center justify-between gap-4 hover:border-slate-700 transition-colors"
               >
                 <div className="flex items-start gap-3 truncate">
-                  <div className="w-8 h-8 rounded-lg bg-indigo-950/60 border border-indigo-800/40 flex items-center justify-center shrink-0 mt-0.5">
+                  <div className="w-8 h-8 rounded-lg bg-blue-950/60 border border-blue-800/40 flex items-center justify-center shrink-0 mt-0.5">
                     {item.item_type === "opportunity" ? (
                       <Award className="w-4 h-4 text-emerald-400" />
                     ) : (
@@ -209,7 +209,7 @@ export function SavedAndApplicationsView({
                       href={item.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-medium text-slate-200 hover:text-indigo-400 transition-colors text-sm truncate block"
+                      className="font-medium text-slate-200 hover:text-sky-400 transition-colors text-sm truncate block"
                     >
                       {item.title}
                     </a>
@@ -221,7 +221,7 @@ export function SavedAndApplicationsView({
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-1.5 text-slate-400 hover:text-indigo-400 transition-colors"
+                    className="p-1.5 text-slate-400 hover:text-sky-400 transition-colors"
                     title="Open link"
                   >
                     <ExternalLink className="w-4 h-4" />

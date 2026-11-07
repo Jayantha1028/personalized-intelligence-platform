@@ -36,6 +36,8 @@ export interface Article {
   relevance_score: number;
   is_verified: boolean;
   created_at: string;
+  user_feedback?: "like" | "dislike" | null;
+  dynamic_relevance?: number;
 }
 
 export interface Opportunity {
@@ -65,6 +67,9 @@ export interface Opportunity {
 export interface UserProfile {
   id: number;
   user_id: number;
+  full_name?: string;
+  email?: string;
+  role?: string;
   country: string;
   state?: string;
   education_level?: string;
@@ -72,8 +77,155 @@ export interface UserProfile {
   academic_year?: number;
   annual_income?: number;
   age?: number;
+  phone?: string;
+  headline?: string;
   skills: string[];
   preferences: Record<string, any>;
+}
+
+export interface AuthUser {
+  id: number;
+  email: string;
+  full_name?: string;
+  role: "STUDENT" | "RESEARCHER" | "ADMIN" | string;
+  is_admin: boolean;
+  is_active: boolean;
+}
+
+export interface AuthResponse {
+  message: string;
+  token: string;
+  tokenType: string;
+  user: AuthUser;
+  profile?: Partial<UserProfile>;
+}
+
+export interface AuthSessionResponse {
+  status: string;
+  user: AuthUser;
+  session: {
+    tokenType: string;
+    algorithm: string;
+    security: string;
+    role: string;
+  };
+  profile?: UserProfile;
+}
+
+export const AUTH_TOKEN_KEY = "antigravity_auth_token";
+
+export function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(AUTH_TOKEN_KEY);
+}
+
+export function setAuthToken(token: string): void {
+  if (typeof window === "undefined") return;
+  localStorage.setItem(AUTH_TOKEN_KEY, token);
+}
+
+export function clearAuthToken(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(AUTH_TOKEN_KEY);
+}
+
+export function getAuthHeaders(): HeadersInit {
+  const token = getAuthToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  return headers;
+}
+
+// Authentication API methods inspired by Enterprise Microservices Architecture
+export async function loginUser(email: string, password: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE_URL}/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Authentication failed");
+  }
+  const data: AuthResponse = await res.json();
+  if (data.token) {
+    setAuthToken(data.token);
+  }
+  return data;
+}
+
+export async function registerUser(payload: {
+  full_name: string;
+  email: string;
+  password: string;
+  role?: string;
+  state?: string;
+  course_or_degree?: string;
+}): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Registration failed");
+  }
+  const data: AuthResponse = await res.json();
+  if (data.token) {
+    setAuthToken(data.token);
+  }
+  return data;
+}
+
+export async function demoLogin(accountType: "student" | "fellow" | "admin" = "student"): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE_URL}/auth/demo-login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ account_type: accountType }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Demo login failed");
+  }
+  const data: AuthResponse = await res.json();
+  if (data.token) {
+    setAuthToken(data.token);
+  }
+  return data;
+}
+
+export async function fetchCurrentUser(): Promise<AuthSessionResponse> {
+  const res = await fetch(`${API_BASE_URL}/auth/me`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to fetch session");
+  return res.json();
+}
+
+export async function changePassword(currentPassword: string, newPassword: string): Promise<{ message: string }> {
+  const res = await fetch(`${API_BASE_URL}/auth/change-password`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      current_password: currentPassword,
+      new_password: newPassword,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Password change failed");
+  }
+  return res.json();
+}
+
+export function logoutUser(): void {
+  clearAuthToken();
 }
 
 export interface Source {
@@ -101,12 +253,69 @@ export async function fetchStats(): Promise<DashboardStats> {
   return res.json();
 }
 
-export async function fetchNews(topic?: string): Promise<Article[]> {
-  const url = topic && topic !== "All" 
-    ? `${API_BASE_URL}/news?topic=${encodeURIComponent(topic)}`
-    : `${API_BASE_URL}/news`;
-  const res = await fetch(url, { cache: "no-store" });
+export interface ArticleFeedbackSummary {
+  feedbacks: Record<number, "like" | "dislike">;
+  topic_weights: Record<string, number>;
+  total_likes: number;
+  total_dislikes: number;
+  boosted_topics: string[];
+  deprioritized_topics: string[];
+}
+
+export async function fetchNews(
+  topic?: string,
+  limit: number = 50,
+  sortBy?: string
+): Promise<Article[]> {
+  const params = new URLSearchParams();
+  if (topic && topic !== "All") params.append("topic", topic);
+  params.append("limit", limit.toString());
+  if (sortBy) params.append("sort_by", sortBy);
+
+  const url = `${API_BASE_URL}/news?${params.toString()}`;
+  const res = await fetch(url, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to fetch news");
+  return res.json();
+}
+
+export async function sendArticleFeedback(
+  articleId: number,
+  feedback: "like" | "dislike" | "neutral"
+): Promise<{
+  article_id: number;
+  feedback: string | null;
+  topic: string;
+  topic_weight: number;
+  active_weights: Record<string, number>;
+  message: string;
+}> {
+  const res = await fetch(`${API_BASE_URL}/news/${articleId}/feedback`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ feedback }),
+  });
+  if (!res.ok) throw new Error("Failed to submit feedback");
+  return res.json();
+}
+
+export async function fetchFeedbackSummary(): Promise<ArticleFeedbackSummary> {
+  const res = await fetch(`${API_BASE_URL}/news/feedback/summary`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to fetch feedback summary");
+  return res.json();
+}
+
+export async function resetFeedTuning(): Promise<{ message: string }> {
+  const res = await fetch(`${API_BASE_URL}/news/feedback/reset`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) throw new Error("Failed to reset feed tuning");
   return res.json();
 }
 
@@ -120,7 +329,10 @@ export async function fetchOpportunities(category?: string): Promise<Opportunity
 }
 
 export async function fetchProfile(): Promise<UserProfile> {
-  const res = await fetch(`${API_BASE_URL}/profile`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE_URL}/profile`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
   if (!res.ok) throw new Error("Failed to fetch profile");
   return res.json();
 }
@@ -128,7 +340,7 @@ export async function fetchProfile(): Promise<UserProfile> {
 export async function updateProfile(data: Partial<UserProfile>): Promise<UserProfile> {
   const res = await fetch(`${API_BASE_URL}/profile`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: getAuthHeaders(),
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update profile");

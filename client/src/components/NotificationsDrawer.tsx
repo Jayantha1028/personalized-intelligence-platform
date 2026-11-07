@@ -74,10 +74,10 @@ export function NotificationsDrawer({
         {/* Header */}
         <div className="p-5 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Bell className="w-5 h-5 text-indigo-400" />
+            <Bell className="w-5 h-5 text-sky-400" />
             <h3 className="font-bold text-base text-slate-100">Notifications & Alerts</h3>
             {unreadCount > 0 && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-indigo-600 text-white">
+              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white">
                 {unreadCount}
               </span>
             )}
@@ -90,7 +90,7 @@ export function NotificationsDrawer({
               className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors rounded hover:bg-slate-800"
               title="Scan deadlines and new matches now"
             >
-              <RefreshCw className={`w-4 h-4 ${scanning ? "animate-spin text-indigo-400" : ""}`} />
+              <RefreshCw className={`w-4 h-4 ${scanning ? "animate-spin text-sky-400" : ""}`} />
             </button>
             <button
               onClick={onClose}
@@ -130,14 +130,14 @@ export function NotificationsDrawer({
                       {isDeadline ? (
                         <Clock className="w-4 h-4 text-amber-400 shrink-0" />
                       ) : (
-                        <Award className="w-4 h-4 text-indigo-400 shrink-0" />
+                        <Award className="w-4 h-4 text-sky-400 shrink-0" />
                       )}
                       <span className="font-semibold text-xs text-slate-200">
                         {notif.title}
                       </span>
                     </div>
                     {!notif.is_read && (
-                      <span className="w-2 h-2 rounded-full bg-indigo-400 shrink-0 mt-1"></span>
+                      <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-1"></span>
                     )}
                   </div>
 

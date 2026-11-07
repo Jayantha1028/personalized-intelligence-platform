@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from app.database.models import Source, SourceRun, Article, UserProfile, UserInterest
 from app.ingestion.rss_fetcher import RSSFetcher
-from app.processing.cleaner import normalize_url, normalize_title, extract_clean_article
+from app.processing.cleaner import normalize_url, normalize_title, extract_clean_article, is_english_content
 from app.processing.deduplicator import check_url_exists, find_or_create_cluster
 from app.news_engine.summarizer import HybridSummarizer
 from app.news_engine.relevance import calculate_relevance_score
@@ -77,6 +77,10 @@ class IngestionPipeline:
             for entry in entries[:max_items]:
                 clean_url = normalize_url(entry["url"])
                 clean_title = normalize_title(entry["title"])
+
+                # Skip non-English / Hindi news items
+                if not is_english_content(clean_title):
+                    continue
 
                 # 1. Deduplication check
                 if await check_url_exists(db, clean_url):

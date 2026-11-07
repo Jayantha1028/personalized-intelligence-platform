@@ -86,7 +86,7 @@ export function DeadlinesView({ opportunities }: DeadlinesViewProps) {
                       href={opp.official_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
+                      className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 font-medium transition-colors"
                     >
                       <span>Apply</span>
                       <ExternalLink className="w-3 h-3" />
