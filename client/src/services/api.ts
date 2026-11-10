@@ -264,12 +264,14 @@ export interface ArticleFeedbackSummary {
 
 export async function fetchNews(
   topic?: string,
-  limit: number = 50,
-  sortBy?: string
+  limit: number = 25,
+  sortBy?: string,
+  maxDays: number = 2
 ): Promise<Article[]> {
   const params = new URLSearchParams();
   if (topic && topic !== "All") params.append("topic", topic);
-  params.append("limit", limit.toString());
+  params.append("limit", Math.min(limit, 25).toString());
+  params.append("max_days", maxDays.toString());
   if (sortBy) params.append("sort_by", sortBy);
 
   const url = `${API_BASE_URL}/news?${params.toString()}`;

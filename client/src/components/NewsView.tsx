@@ -298,15 +298,26 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
     }
   };
 
-  // Dynamic Topic Counts
+  // Filter news to articles strictly published less than 2 days ago (< 48 hours) and cap at 25 items
+  const recentNews = useMemo(() => {
+    return news
+      .filter((article) => {
+        if (!article.published_at) return true;
+        const diffHours = (Date.now() - new Date(article.published_at).getTime()) / (1000 * 60 * 60);
+        return diffHours <= 48;
+      })
+      .slice(0, 25);
+  }, [news]);
+
+  // Dynamic Topic Counts based on recent 25 articles
   const topicsWithCounts = useMemo(() => {
-    const counts: Record<string, number> = { All: news.length };
-    news.forEach((a) => {
+    const counts: Record<string, number> = { All: recentNews.length };
+    recentNews.forEach((a) => {
       const t = a.topic || "General";
       counts[t] = (counts[t] || 0) + 1;
     });
     return counts;
-  }, [news]);
+  }, [recentNews]);
 
   const uniqueTopics = useMemo(() => {
     const list = [
@@ -328,18 +339,18 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
   // Dynamic Growth Vector Counts
   const growthCounts = useMemo(() => {
     const counts: Record<GrowthVector, number> = {
-      all: news.length,
+      all: recentNews.length,
       career: 0,
       capital: 0,
       skills: 0,
       strategic: 0,
     };
-    news.forEach((a) => {
+    recentNews.forEach((a) => {
       const v = getGrowthVector(a).id;
       counts[v] = (counts[v] || 0) + 1;
     });
     return counts;
-  }, [news]);
+  }, [recentNews]);
 
   // Dynamic score calculator taking user feedback and topic tuning into account
   const getDynamicScore = (article: Article) => {
@@ -354,7 +365,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
   // Filter & Sort
   const filteredAndSortedNews = useMemo(() => {
-    return news
+    return recentNews
       .filter((article) => {
         // Hide disliked articles if setting is enabled
         const userFb = feedbacks[article.id];
@@ -390,8 +401,9 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
           return dateB - dateA;
         }
         return 0;
-      });
-  }, [news, selectedTopic, selectedGrowthVector, searchQuery, sortBy, onlyActionable, onlyHighMatch, feedbacks, topicWeights, hideDisliked]);
+      })
+      .slice(0, 25);
+  }, [recentNews, selectedTopic, selectedGrowthVector, searchQuery, sortBy, onlyActionable, onlyHighMatch, feedbacks, topicWeights, hideDisliked]);
 
   // Featured top pick story
   const featuredStory = useMemo(() => {
@@ -1002,10 +1014,18 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
       {/* Feed Counter Bar */}
       <div className="flex items-center justify-between text-xs text-slate-500 px-1 font-mono">
-        <span>
-          Showing <strong className="text-slate-900 font-bold">{filteredAndSortedNews.length}</strong> of{" "}
-          <strong className="text-slate-900 font-bold">{news.length}</strong> curated intelligence articles
-        </span>
+        <div className="flex items-center gap-2 flex-wrap">
+          <span>
+            Showing <strong className="text-slate-900 font-bold">{filteredAndSortedNews.length}</strong> of{" "}
+            <strong className="text-slate-900 font-bold">{recentNews.length}</strong> curated intelligence articles
+          </span>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10.5px] font-mono bg-emerald-50 text-emerald-700 border border-emerald-200">
+            &lt; 2 days ago
+          </span>
+          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10.5px] font-mono bg-[#635BDB]/10 text-[#635BDB] border border-[#635BDB]/20">
+            cap: 25
+          </span>
+        </div>
         {searchQuery && (
           <button
             onClick={() => setSearchQuery("")}

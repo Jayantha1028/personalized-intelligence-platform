@@ -1,3 +1,4 @@
+from datetime import datetime, timezone, timedelta
 import pytest
 import pytest_asyncio
 from httpx import AsyncClient, ASGITransport
@@ -34,11 +35,28 @@ async def test_news_listing():
         assert response.status_code == 200
         articles = response.json()
         assert len(articles) > 0
+        assert len(articles) <= 25  # Strictly limited to at most 25 articles
+
         first = articles[0]
         assert "title" in first
         assert "summary_bullets" in first
         assert "relevance_score" in first
         assert "personal_impact" in first
+
+        # Verify all returned articles are published within the last 2 days (< 48 hours)
+        now = datetime.now(timezone.utc)
+        cutoff = now - timedelta(days=2)
+        for art in articles:
+            if art.get("published_at"):
+                pub_time = datetime.fromisoformat(art["published_at"])
+                if pub_time.tzinfo is None:
+                    pub_time = pub_time.replace(tzinfo=timezone.utc)
+                assert pub_time >= cutoff, f"Article '{art['title']}' published at {pub_time} is older than 2 days cutoff {cutoff}"
+
+        # Test requesting limit > 25 is strictly clamped to 25
+        res_large = await ac.get("/api/news?limit=100")
+        assert res_large.status_code == 200
+        assert len(res_large.json()) <= 25
 
 
 @pytest.mark.asyncio

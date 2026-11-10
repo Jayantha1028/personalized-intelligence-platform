@@ -1,5 +1,5 @@
 from typing import Optional, List, Dict, Any
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse
 import httpx
 import trafilatura
@@ -249,13 +249,16 @@ async def scrape_and_ingest_url(
 async def list_news(
     topic: Optional[str] = Query(None, description="Filter by topic (e.g. AI, Cloud, Policy, Cyber)"),
     min_relevance: float = Query(0.0, description="Minimum relevance score (0.0 to 1.0)"),
-    limit: int = Query(50, ge=1, le=100),
+    limit: int = Query(25, ge=1, le=100, description="Maximum number of articles to return (capped at 25)"),
     offset: int = Query(0, ge=0),
+    max_days: Optional[int] = Query(2, ge=1, le=30, description="Maximum age of articles in days (default: 2 days)"),
     sort_by: Optional[str] = Query("relevance", description="Sort order: relevance, date, or quality"),
     current_user: User = Depends(get_current_user),
     db: AsyncSession = Depends(get_db),
 ):
-    """Retrieve personalized news feed dynamically tuned by user likes, dislikes, and topic weights."""
+    """Retrieve personalized news feed dynamically tuned by user likes, dislikes, and topic weights. Limited to at most 25 items published within the last 2 days."""
+    effective_limit = min(limit, 25)
+
     # 1. Fetch user feedbacks
     fb_stmt = select(ArticleFeedback).where(ArticleFeedback.user_id == current_user.id)
     fb_rows = (await db.execute(fb_stmt)).scalars().all()
@@ -277,13 +280,19 @@ async def list_news(
         Source, Article.source_id == Source.id, isouter=True
     ).order_by(*order_clauses)
 
+    # Filter articles to strictly less than max_days ago (default: 2 days / 48 hours)
+    if max_days is not None and max_days > 0:
+        cutoff = datetime.now(timezone.utc) - timedelta(days=max_days)
+        query = query.where(Article.published_at >= cutoff)
+
     if topic and topic.lower() != "all":
         query = query.where(Article.topic.ilike(f"%{topic}%"))
 
     if min_relevance > 0:
         query = query.where(Article.relevance_score >= min_relevance)
 
-    query = query.offset(offset).limit(limit)
+    # Fetch enough candidates to dynamically sort and return up to effective_limit
+    query = query.offset(offset).limit(max(effective_limit * 2, 50))
     result = await db.execute(query)
     rows = result.all()
 
@@ -291,6 +300,11 @@ async def list_news(
     for article, source_name in rows:
         if not is_english_content(article.title):
             continue
+
+        if max_days is not None and max_days > 0 and article.published_at:
+            pub = article.published_at if article.published_at.tzinfo else article.published_at.replace(tzinfo=timezone.utc)
+            if pub < cutoff:
+                continue
 
         user_fb = feedbacks_map.get(article.id)
         topic_key = (article.topic or "").strip().lower()
@@ -330,7 +344,7 @@ async def list_news(
     if sort_by == "relevance":
         articles.sort(key=lambda a: (a.dynamic_relevance or 0.0, a.relevance_score), reverse=True)
 
-    return articles
+    return articles[:effective_limit]
 
 
 @router.post("/{article_id}/feedback")

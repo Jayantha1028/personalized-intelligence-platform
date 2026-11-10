@@ -73,7 +73,7 @@ export default function Home() {
         sessionData,
       ] = await Promise.all([
         fetchStats().catch(() => null),
-        fetchNews("All", 50).catch(() => []),
+        fetchNews("All", 25, undefined, 2).catch(() => []),
         fetchOpportunities().catch(() => []),
         fetchProfile().catch(() => null),
         fetchSources().catch(() => []),

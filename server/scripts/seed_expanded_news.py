@@ -872,13 +872,14 @@ def seed_articles():
         clean_content = f"{art['title']}\n\n" + " ".join(art["summary_bullets"])
         raw_content = clean_content
 
+        pub_str = pub_time.strftime("%Y-%m-%d %H:%M:%S.%f")
         cur.execute(insert_sql, (
             art["source_id"],
             1,
             art["title"],
             art["canonical_url"],
             art["author"],
-            pub_time.isoformat(),
+            pub_str,
             raw_content,
             clean_content,
             summary_json,
@@ -888,7 +889,7 @@ def seed_articles():
             art["quality_score"],
             art["relevance_score"],
             1 if art["is_verified"] else 0,
-            pub_time.isoformat()
+            pub_str
         ))
 
     con.commit()

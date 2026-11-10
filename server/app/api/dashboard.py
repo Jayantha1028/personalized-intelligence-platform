@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, and_
@@ -35,13 +35,17 @@ class DashboardStats(BaseModel):
 async def get_dashboard_stats(db: AsyncSession = Depends(get_db)):
     """Summary metrics and upcoming deadlines for the user's dashboard widgets."""
     now = datetime.now(timezone.utc)
+    cutoff_48h = now - timedelta(days=2)
 
-    # 1. Total & High relevance articles
-    art_count_q = select(func.count(Article.id))
-    total_articles = (await db.execute(art_count_q)).scalar() or 0
+    # 1. Total & High relevance articles (within last 2 days, capped at 25)
+    art_count_q = select(func.count(Article.id)).where(Article.published_at >= cutoff_48h)
+    recent_articles = (await db.execute(art_count_q)).scalar() or 0
+    total_articles = min(25, recent_articles)
 
-    high_rel_q = select(func.count(Article.id)).where(Article.relevance_score >= 0.8)
-    high_relevance_articles = (await db.execute(high_rel_q)).scalar() or 0
+    high_rel_q = select(func.count(Article.id)).where(
+        and_(Article.published_at >= cutoff_48h, Article.relevance_score >= 0.8)
+    )
+    high_relevance_articles = min(total_articles, (await db.execute(high_rel_q)).scalar() or 0)
 
     # 2. Total opportunities
     opp_count_q = select(func.count(Opportunity.id))
