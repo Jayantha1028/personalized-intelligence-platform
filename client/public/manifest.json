@@ -1,0 +1,77 @@
+{
+  "name": "Antigravity Intelligence Platform",
+  "short_name": "Antigravity",
+  "description": "Personalized dual-engine news intelligence, verified opportunity matching, and deadline cockpit for ambitious students and developers.",
+  "start_url": "/",
+  "id": "antigravity-intelligence-platform",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "background_color": "#F7F8FC",
+  "theme_color": "#635BDB",
+  "orientation": "portrait-primary",
+  "lang": "en-US",
+  "dir": "ltr",
+  "categories": ["news", "education", "productivity", "business"],
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Curated News Feed",
+      "short_name": "News Intel",
+      "description": "View latest verified news dispatches (<48h window)",
+      "url": "/?tab=news",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Opportunity Radar",
+      "short_name": "Opportunities",
+      "description": "Matched grants, scholarships, and fellowships",
+      "url": "/?tab=opportunities",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Deadline Tracker",
+      "short_name": "Deadlines",
+      "description": "Chronological application cutoffs & reminders",
+      "url": "/?tab=deadlines",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Tech Blogs & Tasks",
+      "short_name": "Tech Tasks",
+      "description": "Curated engineering blogs and study tasks",
+      "url": "/?tab=tech_blogs",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ],
+  "prefer_related_applications": false
+}

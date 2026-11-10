@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#635BDB" />
+      <stop offset="100%" stop-color="#4F46E5" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+  
+  <!-- Rounded Background -->
+  <rect width="512" height="512" rx="112" fill="url(#bg-grad)" />
+  
+  <!-- Subtle Grid Pattern Accent -->
+  <path d="M0 128 H512 M0 256 H512 M0 384 H512 M128 0 V512 M256 0 V512 M384 0 V512" stroke="rgba(255,255,255,0.06)" stroke-width="2" />
+  
+  <!-- Outer Orbital Ring -->
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#8BDCC0" stroke-width="14" stroke-dasharray="16 10" filter="url(#glow)" />
+  
+  <!-- Inner Dynamic Radar Pulse Arc -->
+  <circle cx="256" cy="256" r="110" fill="none" stroke="rgba(255,255,255,0.85)" stroke-width="12" stroke-dasharray="140 240" stroke-linecap="round" />
+  
+  <!-- Antigravity Delta Symbol (Monogram Apex) -->
+  <polygon points="256,160 336,330 176,330" fill="#FFFFFF" />
+  
+  <!-- Mint Green Intelligent Core -->
+  <circle cx="256" cy="285" r="24" fill="#8BDCC0" />
+</svg>

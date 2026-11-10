@@ -36,6 +36,7 @@ import { NotificationsDrawer } from "@/components/NotificationsDrawer";
 import { TechBlogsAndTasksView } from "@/components/TechBlogsAndTasksView";
 import { AuthModal } from "@/components/AuthModal";
 import { AccountDetailsModal } from "@/components/AccountDetailsModal";
+import { MobileBottomNav } from "@/components/MobileBottomNav";
 import { Loader2 } from "lucide-react";
 
 export default function Home() {
@@ -163,7 +164,7 @@ export default function Home() {
           onOpenAccountModal={() => setAccountModalOpen(true)}
         />
 
-        <main className="flex-1 p-8 overflow-y-auto">
+        <main className="flex-1 p-4 sm:p-6 md:p-8 overflow-y-auto pb-24 md:pb-8">
           {loading ? (
             <div className="h-96 flex flex-col items-center justify-center gap-3 text-slate-500">
               <Loader2 className="w-8 h-8 animate-spin text-[#635BDB]" />
@@ -245,6 +246,14 @@ export default function Home() {
           setAuthModalOpen(true);
         }}
         onSignOut={handleSignOut}
+      />
+
+      {/* Mobile Native Bottom Navigation (iOS & Android) */}
+      <MobileBottomNav
+        activeTab={currentTab}
+        onTabChange={setCurrentTab}
+        matchesCount={stats?.matched_opportunities}
+        deadlinesCount={stats?.upcoming_deadlines_count}
       />
     </div>
   );

@@ -5,6 +5,7 @@ from app.config import settings
 from app.api import api_router
 from app.database.session import init_db
 from app.ingestion.scheduler import scheduler
+from app.middleware.security import ProductionSecurityHeadersMiddleware
 
 
 @asynccontextmanager
@@ -32,6 +33,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(ProductionSecurityHeadersMiddleware)
 
 # Mount API
 app.include_router(api_router, prefix="/api")
