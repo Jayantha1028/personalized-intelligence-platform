@@ -1,7 +1,11 @@
 from typing import List, Union
+from pathlib import Path
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import field_validator
 import json
+
+_ROOT_DB = Path(__file__).resolve().parent.parent.parent / "platform.db"
+_DEFAULT_DB_URL = f"sqlite+aiosqlite:///{_ROOT_DB}" if _ROOT_DB.exists() else "sqlite+aiosqlite:///./platform.db"
 
 
 class Settings(BaseSettings):
@@ -12,12 +16,16 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "temporary-dev-secret-key-replace-in-production-12345"
     
     # Database URL: default to SQLite for instant local dev, switch to postgres+asyncpg in .env
-    DATABASE_URL: str = "sqlite+aiosqlite:///./platform.db"
+    DATABASE_URL: str = _DEFAULT_DB_URL
     
     # CORS Origins
     CORS_ORIGINS: Union[str, List[str]] = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
+        "http://localhost:3001",
+        "http://127.0.0.1:3001",
+        "http://localhost:3002",
+        "http://127.0.0.1:3002",
         "http://localhost:5000",
     ]
     
