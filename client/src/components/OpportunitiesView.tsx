@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { Opportunity, trackApplication } from "@/services/api";
+import { Opportunity, trackApplication, getOpportunityIcsUrl } from "@/services/api";
 import { CircularIntelligenceModal } from "@/components/CircularIntelligenceModal";
+import { ApplicationKitModal } from "@/components/ApplicationKitModal";
+import { generateGoogleCalendarUrl } from "@/services/calendar";
 import {
   Award,
   CheckCircle2,
@@ -14,6 +16,9 @@ import {
   Building,
   ListChecks,
   FileText,
+  Sparkles,
+  Download,
+  CalendarPlus,
 } from "lucide-react";
 
 interface OpportunitiesViewProps {
@@ -27,6 +32,7 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
   const [trackedIds, setTrackedIds] = useState<Set<number>>(new Set());
   const [trackingId, setTrackingId] = useState<number | null>(null);
   const [circularModalOpen, setCircularModalOpen] = useState<boolean>(false);
+  const [selectedDraftOpp, setSelectedDraftOpp] = useState<Opportunity | null>(null);
 
   const handleTrack = async (oppId: number) => {
     if (trackedIds.has(oppId) || trackingId === oppId) return;
@@ -228,7 +234,48 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    {/* AI Draft Application Kit */}
+                    <button
+                      onClick={() => setSelectedDraftOpp(opp)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50 text-[#635BDB] border border-[#635BDB]/30 hover:bg-[#635BDB]/15 transition font-semibold text-xs shadow-sm"
+                      title="Generate customized Statement of Purpose & Cold Email"
+                    >
+                      <Sparkles className="w-3.5 h-3.5 text-[#635BDB]" />
+                      <span>[AI_DRAFT]</span>
+                    </button>
+
+                    {/* Google Calendar Sync & ICS */}
+                    {opp.application_deadline && (
+                      <div className="flex items-center gap-1">
+                        <a
+                          href={generateGoogleCalendarUrl(
+                            opp.title,
+                            opp.application_deadline,
+                            opp.description,
+                            opp.official_url,
+                            opp.provider
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-xl bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 transition text-xs shadow-sm"
+                          title="Add deadline to Google Calendar"
+                        >
+                          <CalendarPlus className="w-3.5 h-3.5 text-amber-600" />
+                          <span className="hidden sm:inline">G-Cal</span>
+                        </a>
+                        <a
+                          href={getOpportunityIcsUrl(opp.id)}
+                          download={`deadline-${opp.id}.ics`}
+                          className="inline-flex items-center gap-1 px-2 py-1.5 rounded-xl bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:bg-slate-50 transition text-xs shadow-sm"
+                          title="Download .ICS for Apple / Outlook Calendar"
+                        >
+                          <Download className="w-3.5 h-3.5 text-slate-500" />
+                          <span className="hidden sm:inline">.ICS</span>
+                        </a>
+                      </div>
+                    )}
+
                     <button
                       onClick={() => handleTrack(opp.id)}
                       disabled={trackedIds.has(opp.id) || trackingId === opp.id}
@@ -259,6 +306,14 @@ export function OpportunitiesView({ opportunities, onRefresh }: OpportunitiesVie
           })
         )}
       </div>
+
+      {/* AI Application Kit Modal */}
+      {selectedDraftOpp && (
+        <ApplicationKitModal
+          opportunity={selectedDraftOpp}
+          onClose={() => setSelectedDraftOpp(null)}
+        />
+      )}
 
       {/* Circular Intelligence Modal */}
       <CircularIntelligenceModal

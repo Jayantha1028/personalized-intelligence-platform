@@ -619,3 +619,150 @@ export async function syncAcademicRecord(studentId: number): Promise<any> {
   if (!res.ok) throw new Error("Failed to sync academic record");
   return res.json();
 }
+
+// -------------------------------------------------------------
+// AI Application Drafter (SOP, Cold Email, Checklist)
+// -------------------------------------------------------------
+export interface ApplicationKitResponse {
+  opportunity_id: number;
+  opportunity_title: string;
+  provider: string;
+  applicant_name: string;
+  tone: string;
+  statement_of_purpose: string;
+  cold_email_subject: string;
+  cold_email_pitch: string;
+  application_checklist: string[];
+  strategic_tips: string[];
+  generated_at: string;
+}
+
+export async function draftApplication(
+  oppId: number,
+  tone: "academic" | "professional" | "startup" = "academic",
+  targetRole?: string,
+  customAchievements?: string[]
+): Promise<ApplicationKitResponse> {
+  const res = await fetch(`${API_BASE_URL}/opportunities/${oppId}/draft-application`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      tone,
+      target_role: targetRole,
+      custom_achievements: customAchievements,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to draft application");
+  }
+  return res.json();
+}
+
+// -------------------------------------------------------------
+// Autonomous Background Ingestion & Scheduler
+// -------------------------------------------------------------
+export interface SchedulerStatusResponse {
+  is_running: boolean;
+  is_syncing: boolean;
+  interval_minutes: number;
+  sync_count: number;
+  last_sync_time: string | null;
+  next_run_time: string | null;
+  last_sync_result: any;
+}
+
+export async function fetchSchedulerStatus(): Promise<SchedulerStatusResponse> {
+  const res = await fetch(`${API_BASE_URL}/scheduler/status`, { cache: "no-store" });
+  if (!res.ok) throw new Error("Failed to fetch scheduler status");
+  return res.json();
+}
+
+export async function triggerSchedulerSync(): Promise<{ status: string; message: string }> {
+  const res = await fetch(`${API_BASE_URL}/scheduler/trigger`, { method: "POST" });
+  if (!res.ok) throw new Error("Failed to trigger autonomous sync");
+  return res.json();
+}
+
+export async function configureScheduler(
+  intervalMinutes?: number,
+  enabled?: boolean
+): Promise<SchedulerStatusResponse> {
+  const res = await fetch(`${API_BASE_URL}/scheduler/config`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ interval_minutes: intervalMinutes, enabled }),
+  });
+  if (!res.ok) throw new Error("Failed to configure scheduler");
+  return res.json();
+}
+
+// -------------------------------------------------------------
+// Telegram Push Alerts & Dispatcher
+// -------------------------------------------------------------
+export interface TelegramConfigResponse {
+  is_configured: boolean;
+  bot_token_preview: string;
+  chat_id: string;
+  channels: string[];
+}
+
+export async function fetchTelegramConfig(): Promise<TelegramConfigResponse> {
+  const res = await fetch(`${API_BASE_URL}/notifications/telegram/config`, {
+    headers: getAuthHeaders(),
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error("Failed to fetch Telegram config");
+  return res.json();
+}
+
+export async function testTelegramAlert(
+  botToken?: string,
+  chatId?: string,
+  customMessage?: string
+): Promise<{ success: boolean; error?: string; message?: string; status_code?: number }> {
+  const res = await fetch(`${API_BASE_URL}/notifications/telegram/test`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      bot_token: botToken,
+      chat_id: chatId,
+      custom_message: customMessage,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail || "Failed to dispatch Telegram test");
+  }
+  return res.json();
+}
+
+export async function saveTelegramConfig(
+  botToken: string,
+  chatId: string,
+  enabled: boolean = true
+): Promise<{ status: string; message: string; is_configured: boolean }> {
+  const res = await fetch(`${API_BASE_URL}/notifications/telegram/config`, {
+    method: "POST",
+    headers: getAuthHeaders(),
+    body: JSON.stringify({
+      bot_token: botToken,
+      chat_id: chatId,
+      enabled,
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to save Telegram config");
+  return res.json();
+}
+
+// -------------------------------------------------------------
+// Calendar Export URLs
+// -------------------------------------------------------------
+export function getAllDeadlinesIcsUrl(): string {
+  return `${API_BASE_URL}/opportunities/export/all-deadlines.ics`;
+}
+
+export function getOpportunityIcsUrl(oppId: number): string {
+  return `${API_BASE_URL}/opportunities/${oppId}/calendar.ics`;
+}
+

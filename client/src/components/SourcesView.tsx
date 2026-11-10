@@ -1,7 +1,12 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import { Source } from "@/services/api";
+import React, { useState, useMemo, useEffect } from "react";
+import {
+  Source,
+  fetchSchedulerStatus,
+  triggerSchedulerSync,
+  SchedulerStatusResponse,
+} from "@/services/api";
 import {
   Radio,
   CheckCircle2,
@@ -15,6 +20,8 @@ import {
   TrendingUp,
   Cloud,
   ShieldCheck,
+  RefreshCw,
+  Zap,
 } from "lucide-react";
 
 interface SourcesViewProps {
@@ -24,6 +31,31 @@ interface SourcesViewProps {
 export function SourcesView({ sources }: SourcesViewProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [schedulerStatus, setSchedulerStatus] = useState<SchedulerStatusResponse | null>(null);
+  const [syncingNow, setSyncingNow] = useState<boolean>(false);
+  const [syncMessage, setSyncMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchSchedulerStatus()
+      .then(setSchedulerStatus)
+      .catch(() => {});
+  }, []);
+
+  const handleManualSync = async () => {
+    setSyncingNow(true);
+    setSyncMessage(null);
+    try {
+      const res = await triggerSchedulerSync();
+      setSyncMessage(res.message);
+      const updated = await fetchSchedulerStatus();
+      setSchedulerStatus(updated);
+      setTimeout(() => setSyncMessage(null), 4000);
+    } catch (e: any) {
+      setSyncMessage(e.message || "Sync failed");
+    } finally {
+      setSyncingNow(false);
+    }
+  };
 
   const categories = [
     { id: "All", label: "All Sources", icon: Radio },
@@ -109,6 +141,49 @@ export function SourcesView({ sources }: SourcesViewProps) {
           </div>
         </div>
       </div>
+
+      {/* Autonomous Ingestion Scheduler Monitor Card */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 font-mono text-xs">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shrink-0">
+            <Zap className="w-5 h-5 animate-pulse" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-slate-900">
+                // AUTONOMOUS_BACKGROUND_INGESTION
+              </span>
+              <span className="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold text-[10.5px]">
+                {schedulerStatus?.is_running ? "[WORKER::ONLINE]" : "[WORKER::STANDBY]"}
+              </span>
+            </div>
+            <p className="text-slate-500 text-[11px] font-sans mt-0.5">
+              Periodically harvests all 53+ approved sources every {schedulerStatus?.interval_minutes || 30} minutes, checks deadlines, and generates push notifications.
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 shrink-0">
+          <div className="text-right hidden sm:block text-[11px] text-slate-500">
+            <div>Cycles: <strong className="text-slate-900">{schedulerStatus?.sync_count || 1}</strong></div>
+            <div>Interval: <strong className="text-slate-900">{schedulerStatus?.interval_minutes || 30}m</strong></div>
+          </div>
+          <button
+            onClick={handleManualSync}
+            disabled={syncingNow || schedulerStatus?.is_syncing}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#635BDB] hover:bg-[#5046CA] text-white font-bold transition shadow-sm disabled:opacity-50"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${syncingNow || schedulerStatus?.is_syncing ? "animate-spin" : ""}`} />
+            <span>{syncingNow || schedulerStatus?.is_syncing ? "Harvesting..." : "Sync Feeds Now"}</span>
+          </button>
+        </div>
+      </div>
+
+      {syncMessage && (
+        <div className="px-4 py-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs font-mono text-emerald-800">
+          ✓ {syncMessage}
+        </div>
+      )}
 
       {/* Control Bar: Categories & Search */}
       <div className="space-y-3 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-[0_2px_12px_rgba(99,91,219,0.03)]">

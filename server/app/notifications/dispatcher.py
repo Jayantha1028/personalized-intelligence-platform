@@ -119,18 +119,63 @@ class NotificationDispatcher:
             for n in created_notifications
         ]
 
-    async def _send_telegram(self, text: str) -> bool:
+    async def _send_telegram(self, text: str, token: Optional[str] = None, chat_id: Optional[str] = None) -> bool:
         """Send message via Telegram Bot API."""
-        if not self.telegram_token or not self.telegram_chat_id:
+        active_token = token or self.telegram_token
+        active_chat_id = chat_id or self.telegram_chat_id
+        if not active_token or not active_chat_id:
             return False
-        url = f"https://api.telegram.org/bot{self.telegram_token}/sendMessage"
+        url = f"https://api.telegram.org/bot{active_token}/sendMessage"
         try:
             async with httpx.AsyncClient(timeout=8.0) as client:
                 res = await client.post(url, json={
-                    "chat_id": self.telegram_chat_id,
+                    "chat_id": active_chat_id,
                     "text": text,
                     "parse_mode": "Markdown",
                 })
                 return res.status_code == 200
         except Exception:
             return False
+
+    async def test_telegram_connection(self, token: Optional[str] = None, chat_id: Optional[str] = None, message: Optional[str] = None) -> Dict[str, Any]:
+        """Test Telegram Bot credentials and return verbose diagnostic feedback."""
+        active_token = (token or self.telegram_token or "").strip()
+        active_chat_id = (chat_id or self.telegram_chat_id or "").strip()
+
+        if not active_token:
+            return {"success": False, "error": "Telegram Bot Token is missing or empty."}
+        if not active_chat_id:
+            return {"success": False, "error": "Telegram Chat ID is missing or empty."}
+
+        test_msg = message or (
+            "🔔 *Antigravity Intelligence Platform: Test Alert*\n\n"
+            "Telegram notification gateway is *ONLINE* and active!\n"
+            "You will receive direct alerts for:\n"
+            "• Urgent Opportunity Deadlines (≤ 72h / 7d)\n"
+            "• High-Fit Match Discoveries (≥ 90% fit)\n"
+            "• Priority Karnataka State Schemes & AI Grants"
+        )
+
+        url = f"https://api.telegram.org/bot{active_token}/sendMessage"
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                res = await client.post(url, json={
+                    "chat_id": active_chat_id,
+                    "text": test_msg,
+                    "parse_mode": "Markdown",
+                })
+                if res.status_code == 200:
+                    return {
+                        "success": True,
+                        "status_code": res.status_code,
+                        "message": "Test alert successfully sent to Telegram!",
+                    }
+                else:
+                    data = res.json() if res.headers.get("content-type", "").startswith("application/json") else {}
+                    return {
+                        "success": False,
+                        "status_code": res.status_code,
+                        "error": data.get("description", f"Telegram API returned status {res.status_code}"),
+                    }
+        except httpx.RequestError as exc:
+            return {"success": False, "error": f"Network error connecting to Telegram: {str(exc)}"}

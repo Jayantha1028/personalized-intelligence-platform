@@ -1,12 +1,14 @@
 from typing import Optional, List, Dict, Any
 from datetime import datetime
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, desc
 from pydantic import BaseModel, ConfigDict
 from app.database.session import get_db
 from app.database.models import Opportunity, OpportunityMatch, UserProfile, User
 from app.opportunity_engine.recalculator import recalculate_user_matches, seed_additional_verified_opportunities
+from app.opportunity_engine.application_drafter import generate_application_kit
+from app.opportunity_engine.calendar_generator import generate_single_event_ics, generate_bundle_ics
 
 router = APIRouter(prefix="/opportunities")
 
@@ -242,4 +244,73 @@ async def get_opportunity(opp_id: int, db: AsyncSession = Depends(get_db)):
         fit_score=match.fit_score if match else 0.5,
         reasons=match.reasons if match else [],
         missing_criteria=match.unknown_criteria if match else [],
+    )
+
+
+class ApplicationDraftRequest(BaseModel):
+    tone: Optional[str] = "academic"  # "academic", "professional", "startup"
+    target_role: Optional[str] = None
+    custom_achievements: Optional[List[str]] = None
+
+
+@router.post("/{opp_id}/draft-application")
+async def draft_application(
+    opp_id: int,
+    data: ApplicationDraftRequest,
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate an AI-powered Statement of Purpose, Cold Email, and Application Checklist tailored to this opportunity."""
+    stmt = select(Opportunity).where(Opportunity.id == opp_id)
+    opp = (await db.execute(stmt)).scalars().first()
+    if not opp:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+
+    profile_stmt = select(UserProfile)
+    profile = (await db.execute(profile_stmt)).scalars().first()
+
+    user_stmt = select(User)
+    user = (await db.execute(user_stmt)).scalars().first()
+
+    kit = await generate_application_kit(
+        opp=opp,
+        profile=profile,
+        user=user,
+        tone=data.tone or "academic",
+        target_role=data.target_role,
+        custom_achievements=data.custom_achievements,
+    )
+    return kit
+
+
+@router.get("/{opp_id}/calendar.ics")
+async def export_single_deadline_ics(opp_id: int, db: AsyncSession = Depends(get_db)):
+    """Export single opportunity deadline as an RFC 5545 standard .ics iCalendar file."""
+    stmt = select(Opportunity).where(Opportunity.id == opp_id)
+    opp = (await db.execute(stmt)).scalars().first()
+    if not opp:
+        raise HTTPException(status_code=404, detail="Opportunity not found")
+
+    ics_content = generate_single_event_ics(opp)
+    filename = f"deadline-opp-{opp_id}.ics"
+    return Response(
+        content=ics_content,
+        media_type="text/calendar; charset=utf-8",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+
+@router.get("/export/all-deadlines.ics")
+async def export_all_deadlines_ics(db: AsyncSession = Depends(get_db)):
+    """Export all open deadlines as an aggregated RFC 5545 .ics iCalendar bundle with 24h & 48h reminder alarms."""
+    stmt = select(Opportunity).where(
+        Opportunity.application_deadline != None,
+        Opportunity.status == "open",
+    ).order_by(Opportunity.application_deadline)
+    opps = (await db.execute(stmt)).scalars().all()
+
+    ics_content = generate_bundle_ics(list(opps), calendar_name="Antigravity All Upcoming Deadlines")
+    return Response(
+        content=ics_content,
+        media_type="text/calendar; charset=utf-8",
+        headers={"Content-Disposition": 'attachment; filename="antigravity-all-deadlines.ics"'},
     )

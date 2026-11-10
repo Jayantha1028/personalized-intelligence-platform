@@ -4,14 +4,17 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.api import api_router
 from app.database.session import init_db
+from app.ingestion.scheduler import scheduler
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: ensure tables exist
+    # Startup: ensure tables exist and start autonomous ingestion
     await init_db()
+    scheduler.start()
     yield
-    # Shutdown logic if any
+    # Shutdown logic
+    scheduler.stop()
 
 
 app = FastAPI(
