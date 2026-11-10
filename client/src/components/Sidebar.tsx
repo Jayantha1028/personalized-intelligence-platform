@@ -37,7 +37,7 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
   ];
 
   return (
-    <aside className="w-64 bg-white/90 backdrop-blur-md border-r border-slate-200/90 flex flex-col justify-between shrink-0 select-none min-h-screen text-slate-700 shadow-[2px_0_12px_rgba(99,91,219,0.03)]">
+    <aside className="hidden md:flex w-64 bg-white/90 backdrop-blur-md border-r border-slate-200/90 flex-col justify-between shrink-0 select-none min-h-screen text-slate-700 shadow-[2px_0_12px_rgba(99,91,219,0.03)]">
       <div>
         {/* Brand Header */}
         <div className="p-6 border-b border-slate-200/80">

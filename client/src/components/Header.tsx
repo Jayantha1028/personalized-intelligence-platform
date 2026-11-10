@@ -10,6 +10,7 @@ import {
   Bell,
   ChevronDown,
   Terminal,
+  Sparkles,
 } from "lucide-react";
 
 interface HeaderProps {
@@ -43,9 +44,17 @@ export function Header({
     .toUpperCase();
 
   return (
-    <header className="h-16 border-b border-slate-200/80 bg-white/85 backdrop-blur-md px-8 flex items-center justify-between sticky top-0 z-20 shadow-[0_1px_8px_rgba(99,91,219,0.03)]">
+    <header className="h-16 border-b border-slate-200/80 bg-white/85 backdrop-blur-md px-3 sm:px-8 flex items-center justify-between sticky top-0 z-20 shadow-[0_1px_8px_rgba(99,91,219,0.03)]">
+      {/* Mobile Brand Mark */}
+      <div className="flex md:hidden items-center gap-2 mr-2 shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-[#635BDB] flex items-center justify-center text-white shadow-sm shadow-[#635BDB]/30">
+          <Sparkles className="w-4 h-4 text-white" />
+        </div>
+        <span className="font-bold text-xs sm:text-sm text-slate-900 tracking-tight hidden xs:inline">Antigravity</span>
+      </div>
+
       {/* Search Bar with Terminal Cue */}
-      <div className="flex items-center gap-3 flex-1 max-w-lg">
+      <div className="flex items-center gap-3 flex-1 max-w-lg min-w-0">
         <div className="relative w-full">
           <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none text-slate-400">
             <Search className="w-3.5 h-3.5 text-slate-400" />
@@ -53,8 +62,8 @@ export function Header({
           </div>
           <input
             type="text"
-            placeholder="Search verified news, schemes, scholarships, cloud credits..."
-            className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl pl-11 pr-4 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#635BDB] focus:bg-white focus:ring-2 focus:ring-[#635BDB]/10 transition-all font-sans"
+            placeholder="Search news, schemes, scholarships..."
+            className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl pl-11 pr-3 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#635BDB] focus:bg-white focus:ring-2 focus:ring-[#635BDB]/10 transition-all font-sans"
           />
         </div>
       </div>
