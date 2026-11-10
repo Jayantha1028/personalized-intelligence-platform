@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Opportunity } from "@/services/api";
-import { Calendar, Clock, ExternalLink, ShieldCheck, AlertCircle } from "lucide-react";
+import { Clock, ExternalLink } from "lucide-react";
 
 interface DeadlinesViewProps {
   opportunities: Opportunity[];
@@ -25,70 +25,75 @@ export function DeadlinesView({ opportunities }: DeadlinesViewProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold text-white tracking-tight">Deadline Tracker</h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[11px] font-bold text-[#635BDB] bg-[#EEEDFD] px-2 py-0.5 rounded border border-[#635BDB]/20">
+            [SCHEDULE::CHRONOLOGICAL]
+          </span>
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight mt-1">Deadline Tracker</h2>
+        <p className="text-sm text-slate-600 mt-1">
           Chronological schedule of application cutoffs for scholarships, internships, and grants.
         </p>
       </div>
 
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl overflow-hidden shadow-sm">
+      <div className="bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-[0_2px_12px_rgba(99,91,219,0.03)]">
         <table className="w-full text-left text-xs">
-          <thead className="bg-slate-950/60 text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-800">
+          <thead className="bg-[#F8FAFC] text-slate-500 font-mono uppercase tracking-wider text-[10px] border-b border-slate-200">
             <tr>
-              <th className="py-3 px-4">Opportunity</th>
-              <th className="py-3 px-4">Provider</th>
-              <th className="py-3 px-4">Category</th>
-              <th className="py-3 px-4">Closing Date</th>
-              <th className="py-3 px-4">Time Left</th>
-              <th className="py-3 px-4 text-right">Action</th>
+              <th className="py-3 px-5 font-bold">// OPPORTUNITY</th>
+              <th className="py-3 px-5 font-bold">PROVIDER</th>
+              <th className="py-3 px-5 font-bold">CATEGORY</th>
+              <th className="py-3 px-5 font-bold">CLOSING DATE</th>
+              <th className="py-3 px-5 font-bold">COUNTDOWN</th>
+              <th className="py-3 px-5 text-right font-bold">ACTION</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800 text-slate-200">
+          <tbody className="divide-y divide-slate-100 text-slate-800">
             {withDeadlines.map((opp) => {
               const daysLeft = getDaysLeft(opp.application_deadline!);
               const isUrgent = daysLeft <= 14;
 
               return (
-                <tr key={opp.id} className="hover:bg-slate-800/40 transition-colors">
-                  <td className="py-4 px-4 font-semibold text-slate-100 max-w-xs">
+                <tr key={opp.id} className="hover:bg-[#F8FAFC] transition-colors">
+                  <td className="py-4 px-5 font-bold text-slate-900 max-w-xs">
                     <p className="truncate">{opp.title}</p>
-                    <span className="text-[10px] text-emerald-400 font-mono">
+                    <span className="text-[11px] text-[#635BDB] font-mono font-semibold">
                       {opp.benefit_summary || `₹${opp.benefit_amount?.toLocaleString()}`}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-slate-400">{opp.provider}</td>
-                  <td className="py-4 px-4">
-                    <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-800 text-slate-300 uppercase">
+                  <td className="py-4 px-5 text-slate-600 font-medium">{opp.provider}</td>
+                  <td className="py-4 px-5">
+                    <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#EEEDFD] text-[#635BDB] border border-[#635BDB]/20 uppercase">
                       {opp.category.replace("_", " ")}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-slate-300">
+                  <td className="py-4 px-5 font-mono text-slate-700">
                     {new Date(opp.application_deadline!).toLocaleDateString(undefined, {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
                     })}
                   </td>
-                  <td className="py-4 px-4">
+                  <td className="py-4 px-5">
                     <span
-                      className={`inline-flex items-center gap-1 font-semibold px-2 py-0.5 rounded text-[11px] ${
+                      className={`inline-flex items-center gap-1 font-mono font-bold px-2.5 py-0.5 rounded-md text-[11px] ${
                         isUrgent
-                          ? "bg-rose-950 text-rose-300 border border-rose-800/60"
-                          : "bg-amber-950 text-amber-300 border border-amber-800/60"
+                          ? "bg-rose-50 text-rose-700 border border-rose-200"
+                          : "bg-amber-50 text-amber-800 border border-amber-200"
                       }`}
                     >
                       <Clock className="w-3 h-3" />
-                      {daysLeft > 0 ? `${daysLeft} days left` : "Ending today"}
+                      {daysLeft > 0 ? `${daysLeft}d left` : "Ending today"}
                     </span>
                   </td>
-                  <td className="py-4 px-4 text-right">
+                  <td className="py-4 px-5 text-right font-mono">
                     <a
                       href={opp.official_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sky-400 hover:text-sky-300 font-medium transition-colors"
+                      className="inline-flex items-center gap-1 text-[#635BDB] hover:text-[#5046CA] font-bold transition-colors"
                     >
-                      <span>Apply</span>
+                      <span>[APPLY]</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   </td>

@@ -11,7 +11,6 @@ import {
   Bell,
   CheckCheck,
   Clock,
-  Sparkles,
   ExternalLink,
   X,
   RefreshCw,
@@ -69,15 +68,15 @@ export function NotificationsDrawer({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-sm animate-in fade-in">
-      <div className="w-full max-w-md bg-slate-900 border-l border-slate-800 h-full flex flex-col justify-between shadow-2xl">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-sm animate-in fade-in">
+      <div className="w-full max-w-md bg-white border-l border-slate-200 h-full flex flex-col justify-between shadow-2xl">
         {/* Header */}
-        <div className="p-5 border-b border-slate-800 flex items-center justify-between">
+        <div className="p-5 border-b border-slate-200 bg-[#F8FAFC] flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <Bell className="w-5 h-5 text-sky-400" />
-            <h3 className="font-bold text-base text-slate-100">Notifications & Alerts</h3>
+            <Bell className="w-5 h-5 text-[#635BDB]" />
+            <h3 className="font-bold text-base text-slate-900">Notifications & Alerts</h3>
             {unreadCount > 0 && (
-              <span className="px-2 py-0.5 rounded-full text-xs font-bold bg-blue-600 text-white">
+              <span className="px-2 py-0.5 rounded-full text-xs font-mono font-bold bg-[#635BDB] text-white">
                 {unreadCount}
               </span>
             )}
@@ -87,14 +86,14 @@ export function NotificationsDrawer({
             <button
               onClick={handleScan}
               disabled={scanning}
-              className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors rounded hover:bg-slate-800"
+              className="p-1.5 text-slate-500 hover:text-slate-800 transition-colors rounded-lg hover:bg-slate-200"
               title="Scan deadlines and new matches now"
             >
-              <RefreshCw className={`w-4 h-4 ${scanning ? "animate-spin text-sky-400" : ""}`} />
+              <RefreshCw className={`w-4 h-4 ${scanning ? "animate-spin text-[#635BDB]" : ""}`} />
             </button>
             <button
               onClick={onClose}
-              className="p-1.5 text-slate-400 hover:text-slate-200 transition-colors rounded hover:bg-slate-800"
+              className="p-1.5 text-slate-400 hover:text-slate-700 transition-colors rounded-lg hover:bg-slate-200"
             >
               <X className="w-4 h-4" />
             </button>
@@ -102,71 +101,66 @@ export function NotificationsDrawer({
         </div>
 
         {/* Content list */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-3">
+        <div className="flex-1 overflow-y-auto divide-y divide-slate-100">
           {notifications.length === 0 ? (
-            <div className="h-64 flex flex-col items-center justify-center text-center text-slate-400 p-6 space-y-2">
-              <CheckCheck className="w-8 h-8 text-emerald-400/80 mb-2" />
-              <p className="font-semibold text-slate-200">All caught up!</p>
-              <p className="text-xs text-slate-500">
-                You will be notified immediately when scholarship deadlines approach or new 90%+ matches are found.
-              </p>
+            <div className="p-8 text-center text-slate-400 text-xs">
+              No notifications yet. Alerts for imminent deadlines and opportunity eligibility will appear here.
             </div>
           ) : (
-            notifications.map((notif) => {
-              const isDeadline = notif.notification_type === "deadline_approaching";
-
-              return (
-                <div
-                  key={notif.id}
-                  onClick={() => !notif.is_read && handleMarkRead(notif.id)}
-                  className={`p-4 rounded-xl border transition-all cursor-pointer ${
-                    notif.is_read
-                      ? "bg-slate-900/40 border-slate-800/60 opacity-70"
-                      : "bg-slate-800/60 border-slate-700 shadow-sm"
-                  }`}
-                >
-                  <div className="flex items-start justify-between gap-2 mb-1.5">
-                    <div className="flex items-center gap-1.5">
-                      {isDeadline ? (
-                        <Clock className="w-4 h-4 text-amber-400 shrink-0" />
-                      ) : (
-                        <Award className="w-4 h-4 text-sky-400 shrink-0" />
-                      )}
-                      <span className="font-semibold text-xs text-slate-200">
-                        {notif.title}
-                      </span>
-                    </div>
-                    {!notif.is_read && (
-                      <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0 mt-1"></span>
+            notifications.map((notif) => (
+              <div
+                key={notif.id}
+                className={`p-4 transition-colors ${
+                  !notif.is_read ? "bg-[#EEEDFD]/30 border-l-4 border-[#635BDB]" : "bg-white hover:bg-[#F8FAFC]"
+                }`}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start gap-2.5">
+                    {notif.notification_type === "deadline_warning" ? (
+                      <AlertCircle className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                    ) : (
+                      <Award className="w-4 h-4 text-[#0E5B44] shrink-0 mt-0.5" />
                     )}
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-900 leading-snug">
+                        {notif.title}
+                      </h4>
+                      <p className="text-[11px] text-slate-600 mt-1 leading-relaxed">
+                        {notif.message}
+                      </p>
+                      <div className="flex items-center gap-2 mt-2 text-[10px] font-mono text-slate-400">
+                        <Clock className="w-3 h-3" />
+                        <span>{new Date(notif.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed pl-5">
-                    {notif.message}
-                  </p>
-
-                  <div className="mt-2.5 pl-5 flex items-center justify-between text-[11px] text-slate-500">
-                    <span>{new Date(notif.created_at).toLocaleDateString()}</span>
-                    <span className="capitalize">{notif.channel} alert</span>
-                  </div>
+                  {!notif.is_read && (
+                    <button
+                      onClick={() => handleMarkRead(notif.id)}
+                      className="text-[10px] font-mono text-[#635BDB] hover:text-[#5046CA] whitespace-nowrap"
+                    >
+                      [MARK_READ]
+                    </button>
+                  )}
                 </div>
-              );
-            })
+              </div>
+            ))
           )}
         </div>
 
         {/* Footer */}
-        {notifications.length > 0 && (
-          <div className="p-4 border-t border-slate-800 bg-slate-950/40 flex items-center justify-between text-xs">
-            <button
-              onClick={handleMarkAllRead}
-              className="text-slate-400 hover:text-slate-200 font-medium transition-colors"
-            >
-              Mark all as read
-            </button>
-            <span className="text-[11px] text-slate-500">Idempotent alerts enabled</span>
-          </div>
-        )}
+        <div className="p-4 border-t border-slate-200 bg-[#F8FAFC] flex items-center justify-between text-xs">
+          <button
+            onClick={handleMarkAllRead}
+            disabled={unreadCount === 0}
+            className="flex items-center gap-1.5 text-slate-600 hover:text-slate-900 disabled:opacity-40 transition-colors font-mono font-semibold"
+          >
+            <CheckCheck className="w-4 h-4" />
+            <span>[MARK_ALL_READ]</span>
+          </button>
+          <span className="text-[11px] font-mono text-slate-400">Deterministic Engine v2.4</span>
+        </div>
       </div>
     </div>
   );

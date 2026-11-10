@@ -11,12 +11,8 @@ import {
   Shield,
   User,
   Mail,
-  Phone,
   KeyRound,
-  Sparkles,
-  MapPin,
   GraduationCap,
-  Lock,
 } from "lucide-react";
 
 interface ProfileViewProps {
@@ -142,46 +138,51 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
     <div className="space-y-6 max-w-4xl pb-12">
       {/* Page Title */}
       <div>
-        <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-          <UserCheck className="w-5 h-5 text-cyan-400" />
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[11px] font-bold text-[#635BDB] bg-[#EEEDFD] px-2 py-0.5 rounded border border-[#635BDB]/20">
+            [IDENTITY::VERIFIED]
+          </span>
+        </div>
+        <h2 className="text-2xl font-bold text-slate-900 tracking-tight mt-1 flex items-center gap-2">
+          <UserCheck className="w-6 h-6 text-[#635BDB]" />
           User Profile & Opportunity Eligibility
         </h2>
-        <p className="text-sm text-slate-400 mt-1">
+        <p className="text-sm text-slate-600 mt-1">
           Manage your personal identity, contact details, and deterministic criteria used to calculate verified scholarships, grants, and fellowship matches.
         </p>
       </div>
 
-      {/* Account Identity Card (Inspired by reference microservices portal) */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 shadow-sm">
+      {/* Account Identity Card */}
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-[0_2px_12px_rgba(99,91,219,0.04)]">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="relative">
-              <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 via-cyan-500 to-cyan-400 text-slate-950 font-black text-xl flex items-center justify-center shadow-lg shadow-cyan-500/20 ring-4 ring-slate-800">
+              <div className="w-16 h-16 rounded-2xl bg-[#635BDB] text-white font-mono font-bold text-xl flex items-center justify-center shadow-lg shadow-[#635BDB]/25 ring-4 ring-[#EEEDFD]">
                 {initials}
               </div>
-              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-slate-900"></span>
+              <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-[#8BDCC0] ring-2 ring-white"></span>
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h3 className="text-lg font-bold text-slate-100">{fullName}</h3>
-                <span className="text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800 text-cyan-400">
-                  {role}
+                <h3 className="text-lg font-bold text-slate-900">{fullName}</h3>
+                <span className="text-[10px] font-mono uppercase font-bold px-2 py-0.5 rounded-md bg-[#EEEDFD] border border-[#635BDB]/30 text-[#635BDB]">
+                  [{role}]
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">{profile.headline || formData.headline}</p>
-              <div className="flex items-center gap-3 mt-2 text-xs text-slate-400">
-                <span className="flex items-center gap-1 font-mono text-[11px] text-slate-300">
-                  <Mail className="w-3.5 h-3.5 text-cyan-400" /> {profile.email || "alex.sharma@example.in"}
+              <p className="text-xs text-slate-500 mt-0.5">{profile.headline || formData.headline}</p>
+              <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 font-mono">
+                <span className="flex items-center gap-1 text-[11px] text-slate-700">
+                  <Mail className="w-3.5 h-3.5 text-[#635BDB]" /> {profile.email || "alex.sharma@example.in"}
                 </span>
                 <span>&bull;</span>
-                <span className="flex items-center gap-1 text-[11px] text-emerald-400 font-medium">
-                  <Shield className="w-3.5 h-3.5" /> 256-Bit HS256 Session Active
+                <span className="flex items-center gap-1 text-[11px] text-[#0E5B44] font-medium">
+                  <Shield className="w-3.5 h-3.5" /> 256-Bit Scrypt Auth Active
                 </span>
               </div>
             </div>
           </div>
-          <div className="flex sm:flex-col items-end justify-center">
-            <span className="text-xs font-mono font-bold px-2.5 py-1 rounded bg-slate-800 border border-slate-700 text-slate-300">
+          <div className="flex sm:flex-col items-end justify-center font-mono">
+            <span className="text-xs font-bold px-3 py-1.5 rounded-xl bg-[#F8FAFC] border border-slate-200 text-slate-700">
               User ID #{profile.user_id}
             </span>
           </div>
@@ -195,12 +196,12 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
       />
 
       {/* Profile & Eligibility Form */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
-        <div className="border-b border-slate-800 pb-3 mb-5">
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <User className="w-4 h-4 text-cyan-400" /> Personal Identity & Contact Information
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-[0_2px_12px_rgba(99,91,219,0.03)]">
+        <div className="border-b border-slate-100 pb-3 mb-5">
+          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <User className="w-4 h-4 text-[#635BDB]" /> Personal Identity & Contact Information
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Your name and contact info are saved with cryptographic session integrity.
           </p>
         </div>
@@ -208,19 +209,19 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
         <form onSubmit={handleSubmit} className="space-y-5">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Full Name
               </label>
               <input
                 type="text"
                 value={formData.full_name}
                 onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Contact Phone
               </label>
               <input
@@ -228,12 +229,12 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
                 placeholder="+91 98860 12345"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Professional Bio / Headline
               </label>
               <input
@@ -241,53 +242,53 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
                 placeholder="e.g. 3rd Year Computer Science Undergrad @ VTU Bengaluru"
                 value={formData.headline}
                 onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
           </div>
 
-          <div className="border-t border-slate-800 pt-5 mb-2">
-            <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-              <GraduationCap className="w-4 h-4 text-cyan-400" /> Karnataka Eligibility & Opportunity Match Criteria
+          <div className="border-t border-slate-100 pt-5 mb-2">
+            <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+              <GraduationCap className="w-4 h-4 text-[#635BDB]" /> Karnataka Eligibility & Opportunity Match Criteria
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-slate-500 mt-0.5">
               Parameters matched against government schemes (KDEM, NSP, MeitY) and international fellowships.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Country
               </label>
               <input
                 type="text"
                 value={formData.country}
                 onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 State / Domicile
               </label>
               <input
                 type="text"
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Education Level
               </label>
               <select
                 value={formData.education_level}
                 onChange={(e) => setFormData({ ...formData, education_level: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               >
                 <option value="undergraduate">Undergraduate (B.Tech, B.Sc, B.Com)</option>
                 <option value="postgraduate">Postgraduate (M.Tech, M.Sc, MBA, PhD)</option>
@@ -297,13 +298,13 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Academic Year
               </label>
               <select
                 value={formData.academic_year}
                 onChange={(e) => setFormData({ ...formData, academic_year: Number(e.target.value) })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white font-mono"
               >
                 <option value={1}>Year 1</option>
                 <option value={2}>Year 2</option>
@@ -313,26 +314,26 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Degree / Specialization
               </label>
               <input
                 type="text"
                 value={formData.course_or_degree}
                 onChange={(e) => setFormData({ ...formData, course_or_degree: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Annual Family Income (₹ INR)
               </label>
               <input
                 type="number"
                 value={formData.annual_income}
                 onChange={(e) => setFormData({ ...formData, annual_income: Number(e.target.value) })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white font-mono"
               />
               <span className="text-[11px] text-slate-500 mt-1 block">
                 Evaluates state and national scholarship income ceilings (e.g., SSP ₹2.5L / NSP ₹4.5L).
@@ -340,48 +341,48 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Age
               </label>
               <input
                 type="number"
                 value={formData.age}
                 onChange={(e) => setFormData({ ...formData, age: Number(e.target.value) })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white font-mono"
               />
             </div>
 
             <div className="sm:col-span-2">
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                 Technical Skills & Tools (Comma separated)
               </label>
               <input
                 type="text"
                 value={formData.skills}
                 onChange={(e) => setFormData({ ...formData, skills: e.target.value })}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-800 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs text-slate-400">
-              <Shield className="w-4 h-4 text-emerald-400" />
-              <span>Strict client-side and deterministic server-side evaluation.</span>
+          <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs text-slate-500 font-mono">
+              <Shield className="w-4 h-4 text-[#0E5B44]" />
+              <span>[EVALUATION::DETERMINISTIC_ENGINE]</span>
             </div>
 
             <div className="flex items-center gap-3">
               {saveSuccess && (
-                <span className="flex items-center gap-1 text-xs text-emerald-400 font-medium">
+                <span className="flex items-center gap-1 text-xs text-[#0E5B44] font-bold font-mono">
                   <CheckCircle className="w-3.5 h-3.5" />
-                  Saved & Recalculated!
+                  [SAVED_&_RECALCULATED]
                 </span>
               )}
 
               <button
                 type="submit"
                 disabled={saving}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold text-xs transition-colors shadow-sm disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#635BDB] hover:bg-[#5046CA] text-white font-bold text-xs transition-colors shadow-sm disabled:opacity-50"
               >
                 <Save className="w-3.5 h-3.5" />
                 <span>{saving ? "Saving..." : "Save Profile & Update Matches"}</span>
@@ -392,33 +393,33 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
       </div>
 
       {/* Security & Password Management Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-sm">
-        <div className="border-b border-slate-800 pb-3 mb-4">
-          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <KeyRound className="w-4 h-4 text-cyan-400" /> Security & Credential Management
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-6 shadow-[0_2px_12px_rgba(99,91,219,0.03)]">
+        <div className="border-b border-slate-100 pb-3 mb-4">
+          <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+            <KeyRound className="w-4 h-4 text-[#635BDB]" /> Security & Credential Management
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Passwords are encrypted using Python standard scrypt with unique 16-byte random salts.
+          <p className="text-xs text-slate-500 mt-0.5">
+            Passwords encrypted with Python scrypt using unique 16-byte random salts.
           </p>
         </div>
 
         {pwdError && (
-          <div className="p-3 mb-4 rounded-xl bg-rose-950/60 border border-rose-800 text-xs text-rose-300 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-rose-400 shrink-0" />
+          <div className="p-3 mb-4 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-700 flex items-center gap-2 font-mono">
+            <AlertCircle className="w-4 h-4 text-rose-600 shrink-0" />
             <span>{pwdError}</span>
           </div>
         )}
 
         {pwdSuccess && (
-          <div className="p-3 mb-4 rounded-xl bg-emerald-950/60 border border-emerald-800 text-xs text-emerald-300 flex items-center gap-2">
-            <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="p-3 mb-4 rounded-xl bg-[#E8F8F2] border border-[#8BDCC0]/80 text-xs text-[#0E5B44] flex items-center gap-2 font-mono">
+            <CheckCircle className="w-4 h-4 text-[#0E5B44] shrink-0" />
             <span>{pwdSuccess}</span>
           </div>
         )}
 
         <form onSubmit={handleChangePassword} className="space-y-4 max-w-lg">
           <div>
-            <label className="block text-xs font-semibold text-slate-300 mb-1">
+            <label className="block text-xs font-semibold text-slate-700 mb-1">
               Current Password
             </label>
             <input
@@ -427,13 +428,13 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
               placeholder="Enter existing password"
               value={currentPwd}
               onChange={(e) => setCurrentPwd(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 New Password (min 8)
               </label>
               <input
@@ -443,11 +444,11 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
                 placeholder="New password"
                 value={newPwd}
                 onChange={(e) => setNewPwd(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
                 Confirm Password
               </label>
               <input
@@ -457,7 +458,7 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
                 placeholder="Confirm password"
                 value={confirmPwd}
                 onChange={(e) => setConfirmPwd(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-900 focus:outline-none focus:border-[#635BDB] focus:bg-white"
               />
             </div>
           </div>
@@ -465,9 +466,9 @@ export function ProfileView({ profile, onProfileUpdated }: ProfileViewProps) {
           <button
             type="submit"
             disabled={pwdSaving}
-            className="py-2 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs border border-slate-700 transition"
+            className="py-2.5 px-4 rounded-xl bg-[#635BDB] hover:bg-[#5046CA] text-white font-bold text-xs transition shadow-sm font-mono"
           >
-            {pwdSaving ? "Updating Password..." : "Update Password"}
+            {pwdSaving ? "[UPDATING...]" : "[UPDATE_PASSWORD]"}
           </button>
         </form>
       </div>

@@ -8,10 +8,10 @@ import {
   Calendar,
   UserCheck,
   Radio,
-  ShieldCheck,
   Sparkles,
   Bookmark,
   CheckSquare,
+  Terminal,
 } from "lucide-react";
 
 export type NavTab = "overview" | "news" | "opportunities" | "deadlines" | "saved" | "tasks" | "profile" | "sources";
@@ -37,52 +37,59 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
   ];
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 select-none min-h-screen text-slate-200">
+    <aside className="w-64 bg-white/90 backdrop-blur-md border-r border-slate-200/90 flex flex-col justify-between shrink-0 select-none min-h-screen text-slate-700 shadow-[2px_0_12px_rgba(99,91,219,0.03)]">
       <div>
         {/* Brand Header */}
-        <div className="p-6 border-b border-slate-800">
-          <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-blue-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-blue-500/25">
+        <div className="p-6 border-b border-slate-200/80">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-[#635BDB] flex items-center justify-center shadow-md shadow-[#635BDB]/30 text-white">
               <Sparkles className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="font-bold text-base tracking-tight text-white leading-none">Antigravity</h1>
-              <p className="text-[11px] text-slate-400 font-medium mt-1">Intelligence & Opportunities</p>
+              <div className="flex items-center gap-1.5">
+                <h1 className="font-bold text-base tracking-tight text-slate-900 leading-none">Antigravity</h1>
+                <span className="font-mono text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#EEEDFD] text-[#635BDB] border border-[#635BDB]/20">
+                  v2.4
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500 font-medium mt-1">Intelligence Cockpit</p>
             </div>
           </div>
         </div>
 
         {/* Navigation */}
-        <nav className="p-4 space-y-1">
-          {navItems.map((item, idx) => {
+        <nav className="p-3 space-y-1">
+          {navItems.map((item) => {
             const isActive = currentTab === item.id;
             const Icon = item.icon;
 
             return (
               <React.Fragment key={item.id}>
                 {item.section && (
-                  <p className="px-3 pt-4 pb-1.5 text-[10px] font-semibold tracking-wider text-slate-500 uppercase">
-                    {item.section}
-                  </p>
+                  <div className="px-3 pt-4 pb-1.5 flex items-center justify-between">
+                    <p className="font-mono text-[10px] font-bold tracking-wider text-slate-400 uppercase">
+                      // {item.section}
+                    </p>
+                  </div>
                 )}
                 <button
                   onClick={() => onTabChange(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                      ? "bg-[#635BDB] text-white shadow-md shadow-[#635BDB]/25 font-semibold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-[#F1F4FA]"
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-400"}`} />
+                    <Icon className={`w-4 h-4 ${isActive ? "text-white" : "text-slate-500"}`} />
                     <span>{item.label}</span>
                   </div>
                   {item.badge !== undefined && item.badge > 0 && (
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                      className={`text-xs px-2 py-0.5 rounded-full font-mono font-semibold ${
                         isActive
-                          ? "bg-white/20 text-white"
-                          : "bg-blue-950/80 text-sky-400 border border-blue-800/60"
+                          ? "bg-white/25 text-white"
+                          : "bg-[#EEEDFD] text-[#635BDB] border border-[#635BDB]/30"
                       }`}
                     >
                       {item.badge}
@@ -95,15 +102,18 @@ export function Sidebar({ currentTab, onTabChange, matchedCount = 0, deadlinesCo
         </nav>
       </div>
 
-      {/* Footer Info */}
-      <div className="p-4 border-t border-slate-800/80">
-        <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-800">
-          <div className="flex items-center gap-2 text-emerald-400 text-xs font-medium">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span>Deterministic Engine Active</span>
+      {/* Footer Info with Terminal-Inspired Details */}
+      <div className="p-4 border-t border-slate-200/80">
+        <div className="bg-[#F8FAFC] rounded-xl p-3 border border-slate-200/90 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 font-mono text-[11px] font-bold text-[#0E5B44]">
+              <span className="w-2 h-2 rounded-full bg-[#8BDCC0] ring-4 ring-[#8BDCC0]/30 animate-pulse"></span>
+              <span>[SYS::ACTIVE]</span>
+            </div>
+            <span className="font-mono text-[10px] text-slate-400">0.04ms</span>
           </div>
-          <p className="text-[11px] text-slate-400 mt-1">
-            Grounded official evidence &middot; Zero hallucinated rules
+          <p className="font-mono text-[11px] text-slate-500 mt-1.5 leading-relaxed">
+            Deterministic Engine &bull; Zero Hallucinated Rules
           </p>
         </div>
       </div>

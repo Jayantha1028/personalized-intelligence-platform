@@ -86,7 +86,7 @@ export function getGrowthVector(article: Article): {
       id: "career",
       label: "Career & Placement",
       badge: "Career Fast-Track",
-      color: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+      color: "bg-[#E8F8F2] text-[#0E5B44] border-[#8BDCC0]/60",
       icon: "🎓",
     };
   }
@@ -108,7 +108,7 @@ export function getGrowthVector(article: Article): {
       id: "capital",
       label: "Grants & Capital",
       badge: "Grants & Capital",
-      color: "bg-amber-500/15 text-amber-300 border-amber-500/30",
+      color: "bg-amber-50 text-amber-800 border-amber-300",
       icon: "💰",
     };
   }
@@ -128,7 +128,7 @@ export function getGrowthVector(article: Article): {
       id: "skills",
       label: "Skills & Mastery",
       badge: "Skill Mastery",
-      color: "bg-cyan-500/15 text-cyan-300 border-cyan-500/30",
+      color: "bg-[#EEEDFD] text-[#635BDB] border-[#635BDB]/30",
       icon: "⚡",
     };
   }
@@ -137,7 +137,7 @@ export function getGrowthVector(article: Article): {
     id: "strategic",
     label: "Strategic Macro",
     badge: "Strategic Macro",
-    color: "bg-blue-500/15 text-sky-300 border-blue-500/30",
+    color: "bg-slate-100 text-slate-800 border-slate-200",
     icon: "🌐",
   };
 }
@@ -429,80 +429,80 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
   const getTopicColor = (topic: string) => {
     const t = topic.toLowerCase();
     if (t.includes("karnataka")) {
-      return "bg-amber-500/20 text-amber-200 border-amber-500/40 font-semibold";
+      return "bg-amber-50 text-amber-800 border-amber-300 font-bold font-mono";
     }
     if (t.includes("politics") || t.includes("geopolit")) {
-      return "bg-orange-500/15 text-orange-300 border-orange-500/30";
+      return "bg-orange-50 text-orange-800 border-orange-200 font-mono";
     }
     if (t.includes("business") || t.includes("market") || t.includes("econom")) {
-      return "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+      return "bg-[#E8F8F2] text-[#0E5B44] border-[#8BDCC0]/60 font-mono";
     }
     if (t.includes("ai") || t.includes("artificial")) {
-      return "bg-cyan-500/15 text-cyan-300 border-cyan-500/30";
+      return "bg-[#EEEDFD] text-[#635BDB] border-[#635BDB]/30 font-bold font-mono";
     }
     if (t.includes("cloud") || t.includes("devops")) {
-      return "bg-sky-500/15 text-sky-300 border-sky-500/30";
+      return "bg-sky-50 text-sky-800 border-sky-200 font-mono";
     }
     if (t.includes("policy") || t.includes("government")) {
-      return "bg-blue-500/15 text-blue-300 border-blue-500/30";
+      return "bg-indigo-50 text-indigo-800 border-indigo-200 font-mono";
     }
     if (t.includes("startup") || t.includes("grant")) {
-      return "bg-teal-500/15 text-teal-300 border-teal-500/30";
+      return "bg-[#E8F8F2] text-[#0E5B44] border-[#8BDCC0]/60 font-mono";
     }
     if (t.includes("cyber") || t.includes("security")) {
-      return "bg-rose-500/15 text-rose-300 border-rose-500/30";
+      return "bg-rose-50 text-rose-800 border-rose-200 font-mono";
     }
-    return "bg-slate-800 text-slate-300 border-slate-700";
+    return "bg-[#F1F4FA] text-slate-700 border-slate-200 font-mono";
   };
 
   return (
     <div className="space-y-6">
-      {/* Top Header Card */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-blue-950/30 to-slate-900 border border-slate-800 p-6 shadow-md">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-semibold border border-emerald-500/30">
-              <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
-              <span>Growth-Centric Intelligence Engine</span>
+      {/* Top Header Card: Electric Indigo Gradient */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#635BDB] via-[#5247CC] to-[#4338CA] border border-[#635BDB]/40 p-7 shadow-lg shadow-[#635BDB]/15 text-white">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
+          <div className="space-y-2 max-w-2xl">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-sm text-white text-xs font-mono font-semibold border border-white/20">
+              <span className="w-2 h-2 rounded-full bg-[#8BDCC0] animate-pulse"></span>
+              <span>[INTEL::DISPATCH_STREAM_ACTIVE]</span>
             </div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
-              Actionable Intelligence to Power Your Growth
+            <h1 className="text-2xl font-bold text-white tracking-tight leading-snug">
+              Growth Intelligence & Strategic Signals
             </h1>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+            <p className="text-xs sm:text-sm text-white/85 leading-relaxed">
               Filtered for zero noise and zero fluff. Every dispatch directly maps to a grant, research fellowship, high-value tech skill, or strategic market advantage.
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
-            <div className="bg-slate-950/70 border border-slate-800 rounded-xl px-3.5 py-2 text-center">
-              <div className="text-lg font-bold text-white">{news.length}</div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Growth Signals</div>
+            <div className="bg-black/20 border border-white/15 rounded-xl px-4 py-2 text-center backdrop-blur-sm">
+              <div className="text-lg font-bold font-mono text-white">{news.length}</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider font-mono">Signals</div>
             </div>
 
-            <div className="bg-slate-950/70 border border-slate-800 rounded-xl px-3.5 py-2 text-center">
-              <div className="text-lg font-bold text-emerald-400">
+            <div className="bg-black/20 border border-white/15 rounded-xl px-4 py-2 text-center backdrop-blur-sm">
+              <div className="text-lg font-bold font-mono text-[#8BDCC0]">
                 {news.length > 0
                   ? `${Math.round(
                       (news.reduce((acc, a) => acc + a.relevance_score, 0) / news.length) * 100
                     )}%`
                   : "95%"}
               </div>
-              <div className="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Avg Growth Fit</div>
+              <div className="text-[10px] text-white/70 uppercase tracking-wider font-mono">Avg Fit</div>
             </div>
 
             <button
               onClick={handleSyncFeeds}
               disabled={isSyncing}
-              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium border border-slate-700/80 transition-all shadow-sm"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-mono font-semibold border border-white/25 transition-all shadow-sm"
               title="Poll latest RSS feeds & official announcements"
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-sky-400" : "text-slate-400"}`} />
-              <span>{isSyncing ? "Syncing..." : "Sync Feeds"}</span>
+              <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-[#8BDCC0]" : "text-white"}`} />
+              <span>{isSyncing ? "[SYNCING...]" : "[SYNC_FEEDS]"}</span>
             </button>
 
             <button
               onClick={() => setScraperOpen(!scraperOpen)}
-              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold shadow-md shadow-blue-600/30 transition-all"
+              className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-[#8BDCC0] hover:bg-[#7bc8ad] text-[#0E5B44] text-xs font-bold transition-all shadow-sm"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>{scraperOpen ? "Close Ingester" : "Ingest URL"}</span>
@@ -513,13 +513,14 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
       {/* Live Web Scraper Drawer */}
       {scraperOpen && (
-        <div className="bg-slate-900/95 border border-blue-900/40 rounded-2xl p-5 space-y-4 shadow-xl transition-all">
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-6 space-y-4 shadow-[0_2px_12px_rgba(99,91,219,0.06)] transition-all">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-200">
-              <Globe className="w-4 h-4 text-cyan-400" />
-              <span>Live Global Article Ingestion & Neural Grounding</span>
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-800">
+              <Globe className="w-4 h-4 text-[#635BDB]" />
+              <span className="font-mono">[NEURAL_INGESTER]</span>
+              <span>Live Global Article Ingestion & Grounding</span>
             </div>
-            <span className="text-[11px] text-slate-400 font-normal">
+            <span className="text-[11px] text-slate-500 font-normal">
               Extracts text, strips ads, and generates a grounded 3-bullet summary with personal impact
             </span>
           </div>
@@ -531,13 +532,13 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               value={scrapeUrlInput}
               onChange={(e) => setScrapeUrlInput(e.target.value)}
               placeholder="Paste any article link (e.g. Reuters, Bloomberg, FT, PIB, TechCrunch)..."
-              className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 font-mono"
+              className="flex-1 bg-[#F1F4FA] border border-slate-200 rounded-xl px-4 py-2.5 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#635BDB] focus:bg-white font-mono"
             />
 
             <select
               value={scrapeTopic}
               onChange={(e) => setScrapeTopic(e.target.value)}
-              className="bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+              className="bg-[#F1F4FA] border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 focus:outline-none focus:border-[#635BDB] focus:bg-white font-mono"
             >
               <option value="Karnataka & Growth">Karnataka & Local Growth</option>
               <option value="World Politics">World Politics & Geopolitics</option>
@@ -553,31 +554,31 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
             <button
               type="submit"
               disabled={isScraping || !scrapeUrlInput.trim()}
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-600 hover:bg-cyan-500 disabled:opacity-50 text-white font-medium text-xs shadow-md shadow-cyan-600/25 transition-all shrink-0"
+              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-[#635BDB] hover:bg-[#5046CA] disabled:opacity-50 text-white font-semibold text-xs shadow-md shadow-[#635BDB]/25 transition-all shrink-0 font-mono"
             >
               {isScraping ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span>Processing...</span>
+                  <Loader2 className="w-4 h-4 animate-spin text-white" />
+                  <span>[INGESTING...]</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Scrape & Ingest</span>
+                  <span>[SCRAPE_&_INGEST]</span>
                 </>
               )}
             </button>
           </form>
 
           {/* Sample quick pills */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-slate-400">
-            <span className="text-[11px] font-medium text-slate-500">Quick Test Samples:</span>
+          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs text-slate-500">
+            <span className="text-[11px] font-mono font-medium text-slate-400">Quick Samples:</span>
             {sampleUrls.map((s) => (
               <button
                 key={s.label}
                 type="button"
                 onClick={() => setScrapeUrlInput(s.url)}
-                className="text-[11px] text-sky-300 hover:text-sky-200 bg-blue-950/40 border border-blue-800/40 px-2 py-0.5 rounded-md transition-colors"
+                className="text-[11px] font-mono text-[#635BDB] hover:text-[#5046CA] bg-[#EEEDFD] border border-[#635BDB]/20 px-2.5 py-1 rounded-lg transition-colors"
               >
                 {s.label}
               </button>
@@ -588,16 +589,16 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
             <div
               className={`p-3 rounded-xl text-xs flex items-center gap-2 ${
                 scrapeMessage.isError
-                  ? "bg-rose-950/50 text-rose-300 border border-rose-900/60"
-                  : "bg-emerald-950/50 text-emerald-300 border border-emerald-900/60"
+                  ? "bg-rose-50 text-rose-800 border border-rose-200"
+                  : "bg-[#E8F8F2] text-[#0E5B44] border border-[#8BDCC0]/60"
               }`}
             >
               {scrapeMessage.isError ? (
-                <Zap className="w-4 h-4 text-rose-400 shrink-0" />
+                <Zap className="w-4 h-4 text-rose-500 shrink-0" />
               ) : (
-                <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
+                <CheckCircle className="w-4 h-4 text-[#0E5B44] shrink-0" />
               )}
-              <span>{scrapeMessage.text}</span>
+              <span className="font-mono">{scrapeMessage.text}</span>
             </div>
           )}
         </div>
@@ -605,12 +606,12 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
       {/* Featured Intelligence Hero Pick */}
       {featuredStory && (
-        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-blue-950/40 to-slate-950 border border-blue-500/30 p-6 shadow-xl space-y-4">
+        <div className="relative overflow-hidden rounded-2xl bg-white border border-slate-200/90 p-7 shadow-[0_2px_16px_rgba(99,91,219,0.06)] space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40 tracking-wide uppercase">
-                <Flame className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                Top Growth Signal
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold bg-amber-50 text-amber-800 border border-amber-300 tracking-wide uppercase">
+                <Flame className="w-3.5 h-3.5 text-amber-600 fill-amber-500" />
+                [TOP_GROWTH_SIGNAL]
               </span>
               <span className={`px-2.5 py-0.5 rounded-md text-xs font-semibold border ${getTopicColor(featuredStory.topic)}`}>
                 {featuredStory.topic}
@@ -620,38 +621,38 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               </span>
             </div>
 
-            <div className="flex items-center gap-3 text-xs text-slate-400">
-              <span className="flex items-center gap-1 font-medium text-slate-300">
+            <div className="flex items-center gap-3 text-xs text-slate-500 font-mono">
+              <span className="flex items-center gap-1 font-medium text-slate-600">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 {formatRelativeTime(featuredStory.published_at)}
               </span>
               <span>&bull;</span>
-              <span className="text-slate-400">{estimateReadTime(featuredStory)}</span>
-              <span className="inline-flex items-center gap-1 text-xs font-bold text-emerald-400 bg-emerald-950/60 border border-emerald-800/60 px-2 py-0.5 rounded-full">
-                {(featuredStory.relevance_score * 100).toFixed(0)}% Relevance Fit
+              <span className="text-slate-500">{estimateReadTime(featuredStory)}</span>
+              <span className="inline-flex items-center gap-1 text-xs font-bold text-[#0E5B44] bg-[#8BDCC0]/30 border border-[#8BDCC0]/60 px-2.5 py-0.5 rounded-full">
+                [FIT::{(featuredStory.relevance_score * 100).toFixed(0)}%]
               </span>
             </div>
           </div>
 
-          <h2 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-snug">
+          <h2 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
             <a
               href={featuredStory.canonical_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-sky-300 transition-colors inline-flex items-center gap-2 group"
+              className="hover:text-[#635BDB] transition-colors inline-flex items-center gap-2 group"
             >
               <span>{featuredStory.title}</span>
-              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-sky-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+              <ArrowUpRight className="w-5 h-5 text-slate-400 group-hover:text-[#635BDB] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
             </a>
           </h2>
 
           {/* Factual Summary Bullets */}
-          <div className="space-y-2 bg-slate-950/40 border border-slate-800/80 rounded-xl p-4">
-            <h3 className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-sky-400" />
-              Verified Factual Takeaways
+          <div className="space-y-2 bg-[#F8FAFC] border border-slate-200/90 rounded-xl p-4">
+            <h3 className="text-[11px] font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+              <CheckCircle className="w-3.5 h-3.5 text-[#635BDB]" />
+              // VERIFIED_FACTUAL_TAKEAWAYS
             </h3>
-            <ul className="space-y-1.5 text-xs text-slate-200 pl-4 list-disc marker:text-sky-400">
+            <ul className="space-y-1.5 text-xs text-slate-700 pl-4 list-disc marker:text-[#635BDB]">
               {featuredStory.summary_bullets.map((b, i) => (
                 <li key={i} className="leading-relaxed">{b}</li>
               ))}
@@ -660,68 +661,70 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
           {/* Why it matters */}
           {featuredStory.personal_impact && (
-            <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-xl p-4 text-xs text-slate-200 flex items-start gap-3 shadow-inner">
-              <Rocket className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+            <div className="bg-[#E8F8F2] border border-[#8BDCC0]/60 rounded-xl p-4 text-xs text-slate-800 flex items-start gap-3 shadow-sm">
+              <Rocket className="w-4 h-4 text-[#0E5B44] shrink-0 mt-0.5" />
               <div>
-                <span className="font-bold text-emerald-300 block mb-0.5">Why this powers your growth: </span>
-                <span className="leading-relaxed text-slate-200">{featuredStory.personal_impact}</span>
+                <span className="font-mono font-bold text-[#0E5B44] block mb-0.5 uppercase tracking-wider text-[11px]">
+                  [GROWTH_CATALYST]:
+                </span>
+                <span className="leading-relaxed text-slate-700">{featuredStory.personal_impact}</span>
               </div>
             </div>
           )}
 
           {/* Actions & Card Footer */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-800/80">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-slate-100">
             <div className="flex items-center gap-2">
               <span className="text-xs text-slate-400 font-medium">Source:</span>
-              <span className="text-xs font-semibold text-slate-200">{featuredStory.source_name}</span>
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-950/40 border border-emerald-800/40 px-2 py-0.5 rounded">
-                <ShieldCheck className="w-3 h-3" />
-                Verified
+              <span className="text-xs font-semibold text-slate-800">{featuredStory.source_name}</span>
+              <span className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold text-[#0E5B44] bg-[#8BDCC0]/25 border border-[#8BDCC0]/50 px-2 py-0.5 rounded">
+                <ShieldCheck className="w-3 h-3 text-[#0E5B44]" />
+                [VERIFIED]
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               {/* Like & Dislike Tuning Buttons */}
-              <div className="flex items-center gap-1 bg-slate-900 border border-slate-800 rounded-lg p-0.5">
+              <div className="flex items-center gap-1 bg-[#F8FAFC] border border-slate-200 rounded-lg p-0.5">
                 <button
                   onClick={() => handleFeedback(featuredStory, "like")}
                   className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all ${
                     feedbacks[featuredStory.id] === "like"
-                      ? "bg-cyan-500/25 text-cyan-400 border border-cyan-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-cyan-400 hover:bg-slate-800"
+                      ? "bg-[#8BDCC0] text-[#0E5B44] font-bold shadow-sm"
+                      : "text-slate-600 hover:text-[#0E5B44] hover:bg-white"
                   }`}
                   title={feedbacks[featuredStory.id] === "like" ? "Liked • Topic Boosted (+25%) • Click to undo" : "Like (boosts topic in feed)"}
                 >
-                  <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[featuredStory.id] === "like" ? "fill-cyan-400/30" : ""}`} />
-                  <span className="hidden sm:inline">Like</span>
+                  <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[featuredStory.id] === "like" ? "fill-[#0E5B44]" : ""}`} />
+                  <span className="hidden sm:inline">Boost</span>
                 </button>
                 <button
                   onClick={() => handleFeedback(featuredStory, "dislike")}
                   className={`inline-flex items-center gap-1 px-2.5 py-1.5 rounded-md text-xs font-semibold transition-all ${
                     feedbacks[featuredStory.id] === "dislike"
-                      ? "bg-rose-500/25 text-rose-400 border border-rose-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-rose-400 hover:bg-slate-800"
+                      ? "bg-rose-100 text-rose-700 font-bold shadow-sm"
+                      : "text-slate-600 hover:text-rose-700 hover:bg-white"
                   }`}
                   title={feedbacks[featuredStory.id] === "dislike" ? "Disliked • Deprioritized • Click to undo" : "Dislike (deprioritizes topic in feed)"}
                 >
-                  <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[featuredStory.id] === "dislike" ? "fill-rose-400/30" : ""}`} />
-                  <span className="hidden sm:inline">Dislike</span>
+                  <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[featuredStory.id] === "dislike" ? "fill-rose-700" : ""}`} />
+                  <span className="hidden sm:inline">Deprioritize</span>
                 </button>
               </div>
 
               <button
                 onClick={() => handleCopyLink(featuredStory)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-xs text-slate-700 transition-colors shadow-sm"
                 title="Copy canonical link"
               >
                 {copiedId === featuredStory.id ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400 font-medium">Copied!</span>
+                    <Check className="w-3.5 h-3.5 text-[#0E5B44]" />
+                    <span className="text-[#0E5B44] font-medium font-mono">Copied!</span>
                   </>
                 ) : (
                   <>
-                    <Share2 className="w-3.5 h-3.5" />
+                    <Share2 className="w-3.5 h-3.5 text-slate-500" />
                     <span>Share</span>
                   </>
                 )}
@@ -730,10 +733,10 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               <button
                 onClick={() => handleSave(featuredStory.id)}
                 disabled={savedIds.has(featuredStory.id) || savingId === featuredStory.id}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   savedIds.has(featuredStory.id)
-                    ? "bg-blue-950 text-sky-300 border border-blue-800/60"
-                    : "bg-blue-600 hover:bg-blue-500 text-white shadow-sm shadow-blue-600/30"
+                    ? "bg-[#EEEDFD] text-[#635BDB] border border-[#635BDB]/30"
+                    : "bg-[#635BDB] hover:bg-[#5046CA] text-white shadow-sm shadow-[#635BDB]/25"
                 }`}
               >
                 {savedIds.has(featuredStory.id) ? (
@@ -754,12 +757,12 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
       )}
 
       {/* Control Bar: Growth Vectors, Topics, Filters, Search, Density Mode */}
-      <div className="space-y-3.5 bg-slate-900/80 border border-slate-800 rounded-2xl p-4 shadow-sm">
+      <div className="space-y-3.5 bg-white border border-slate-200/90 rounded-2xl p-5 shadow-[0_2px_12px_rgba(99,91,219,0.04)]">
         {/* Growth Focus Bar */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-slate-800/80">
-          <span className="text-[11px] font-bold text-slate-300 uppercase tracking-wider shrink-0 flex items-center gap-1.5 mr-1">
-            <Target className="w-3.5 h-3.5 text-sky-400" />
-            Growth Intent:
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none border-b border-slate-100">
+          <span className="text-[11px] font-mono font-bold text-slate-500 uppercase tracking-wider shrink-0 flex items-center gap-1.5 mr-1">
+            <Target className="w-3.5 h-3.5 text-[#635BDB]" />
+            // INTENT:
           </span>
           {[
             { id: "all", label: "All Growth Signals", icon: "🌟", count: growthCounts.all },
@@ -773,15 +776,15 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               onClick={() => setSelectedGrowthVector(gv.id as GrowthVector)}
               className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all shrink-0 ${
                 selectedGrowthVector === gv.id
-                  ? "bg-blue-600 text-white font-semibold shadow-sm shadow-blue-600/30"
-                  : "bg-slate-950/80 text-slate-400 hover:text-slate-200 border border-slate-800"
+                  ? "bg-[#635BDB] text-white font-semibold shadow-sm shadow-[#635BDB]/25"
+                  : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300"
               }`}
             >
               <span>{gv.icon}</span>
               <span>{gv.label}</span>
               <span
-                className={`text-[10px] font-bold px-1.5 py-0.2 rounded-full ${
-                  selectedGrowthVector === gv.id ? "bg-blue-800/90 text-white" : "bg-slate-900 text-slate-400"
+                className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full ${
+                  selectedGrowthVector === gv.id ? "bg-white/25 text-white" : "bg-slate-100 text-slate-600"
                 }`}
               >
                 {gv.count}
@@ -799,17 +802,17 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               <button
                 key={topic}
                 onClick={() => setSelectedTopic(topic)}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium transition-all whitespace-nowrap shrink-0 ${
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono transition-all whitespace-nowrap shrink-0 ${
                   isSelected
-                    ? "bg-blue-600 text-white shadow-sm shadow-blue-600/30 font-semibold"
-                    : "bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800 hover:border-slate-700"
+                    ? "bg-[#635BDB] text-white shadow-sm shadow-[#635BDB]/25 font-bold"
+                    : "bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300"
                 }`}
               >
-                {topic.includes("Karnataka") && <MapPin className="w-3 h-3 text-amber-300 shrink-0" />}
+                {topic.includes("Karnataka") && <MapPin className="w-3 h-3 text-amber-500 shrink-0" />}
                 <span>{topic}</span>
                 <span
                   className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
-                    isSelected ? "bg-blue-800/90 text-white" : "bg-slate-800 text-slate-400"
+                    isSelected ? "bg-white/25 text-white" : "bg-slate-100 text-slate-600"
                   }`}
                 >
                   {count}
@@ -820,7 +823,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
         </div>
 
         {/* Second Row: Search, Quick Toggles, Sorting, and View Switcher */}
-        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-2 border-t border-slate-800/80">
+        <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-2 border-t border-slate-100">
           {/* Search Box */}
           <div className="relative flex-1 max-w-md">
             <Search className="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
@@ -829,12 +832,12 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search world politics, economy, AI, policy, or actions..."
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full bg-[#F1F4FA] border border-slate-200 rounded-xl pl-9 pr-8 py-2 text-xs text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-[#635BDB] focus:bg-white transition-colors font-sans"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -845,47 +848,47 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
           <div className="flex flex-wrap items-center gap-2">
             <button
               onClick={() => setOnlyHighMatch(!onlyHighMatch)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors flex items-center gap-1 ${
+              className={`px-2.5 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-colors flex items-center gap-1 ${
                 onlyHighMatch
-                  ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
-                  : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-300"
+                  ? "bg-amber-50 border-amber-300 text-amber-800"
+                  : "bg-white border-slate-200 text-slate-600 hover:text-slate-900"
               }`}
             >
-              <Flame className="w-3 h-3" />
-              <span>High Match (≥88%)</span>
+              <Flame className="w-3 h-3 text-amber-600" />
+              <span>[FIT &ge; 88%]</span>
             </button>
 
             <button
               onClick={() => setOnlyActionable(!onlyActionable)}
-              className={`px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-colors flex items-center gap-1 ${
+              className={`px-2.5 py-1.5 rounded-xl text-xs font-mono font-semibold border transition-colors flex items-center gap-1 ${
                 onlyActionable
-                  ? "bg-emerald-500/15 border-emerald-500/40 text-emerald-300"
-                  : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-300"
+                  ? "bg-[#E8F8F2] border-[#8BDCC0]/60 text-[#0E5B44]"
+                  : "bg-white border-slate-200 text-slate-600 hover:text-slate-900"
               }`}
             >
-              <Zap className="w-3 h-3" />
-              <span>Actionable</span>
+              <Zap className="w-3 h-3 text-[#0E5B44]" />
+              <span>[ACTIONABLE]</span>
             </button>
 
             {/* Sort Select */}
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-300 focus:outline-none focus:border-blue-500"
+              className="bg-white border border-slate-200 rounded-xl px-2.5 py-1.5 text-xs text-slate-700 font-mono focus:outline-none focus:border-[#635BDB]"
             >
-              <option value="relevance">Highest Relevance</option>
-              <option value="newest">Most Recent</option>
-              <option value="quality">Quality Score</option>
+              <option value="relevance">Sort: Relevance</option>
+              <option value="newest">Sort: Recent</option>
+              <option value="quality">Sort: Quality</option>
             </select>
 
             {/* Density View Switcher */}
-            <div className="flex items-center bg-slate-950 border border-slate-800 rounded-lg p-0.5">
+            <div className="flex items-center bg-[#F1F4FA] border border-slate-200 rounded-xl p-0.5">
               <button
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded transition-colors ${
+                className={`p-1.5 rounded-lg transition-colors ${
                   viewMode === "grid"
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-[#635BDB] text-white shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
                 }`}
                 title="Magazine Grid View"
               >
@@ -893,10 +896,10 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               </button>
               <button
                 onClick={() => setViewMode("editorial")}
-                className={`p-1.5 rounded transition-colors ${
+                className={`p-1.5 rounded-lg transition-colors ${
                   viewMode === "editorial"
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-[#635BDB] text-white shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
                 }`}
                 title="Editorial Detailed View"
               >
@@ -904,10 +907,10 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               </button>
               <button
                 onClick={() => setViewMode("compact")}
-                className={`p-1.5 rounded transition-colors ${
+                className={`p-1.5 rounded-lg transition-colors ${
                   viewMode === "compact"
-                    ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:text-slate-200"
+                    ? "bg-[#635BDB] text-white shadow-sm"
+                    : "text-slate-500 hover:text-slate-800"
                 }`}
                 title="Compact Wire View"
               >
@@ -920,14 +923,14 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
       {/* Dynamic Feed Feedback Notification Toast */}
       {feedbackToast && (
-        <div className="p-3 rounded-xl bg-cyan-950/80 border border-cyan-700/80 text-xs text-cyan-200 flex items-center justify-between shadow-lg shadow-cyan-950/40 animate-in fade-in duration-200">
+        <div className="p-3.5 rounded-xl bg-[#E8F8F2] border border-[#8BDCC0]/80 text-xs text-[#0E5B44] flex items-center justify-between shadow-sm animate-in fade-in duration-200 font-mono">
           <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
-            <span className="font-medium">{feedbackToast}</span>
+            <Sparkles className="w-4 h-4 text-[#0E5B44] shrink-0" />
+            <span className="font-semibold">{feedbackToast}</span>
           </div>
           <button
             onClick={() => setFeedbackToast(null)}
-            className="text-cyan-400 hover:text-white text-xs p-1"
+            className="text-[#0E5B44] hover:text-[#083528] text-xs p-1"
           >
             ✕
           </button>
@@ -935,21 +938,21 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
       )}
 
       {/* Dynamic Feed Preference Tuning Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-3 px-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs shadow-sm">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 px-5 flex flex-col md:flex-row md:items-center justify-between gap-3 text-xs shadow-[0_2px_12px_rgba(99,91,219,0.03)]">
         <div className="flex flex-wrap items-center gap-2">
-          <span className="font-semibold text-slate-200 flex items-center gap-1.5">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-cyan-400" />
-            <span>Feed Tuning:</span>
+          <span className="font-bold text-slate-800 flex items-center gap-1.5 font-mono">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#635BDB]" />
+            <span>[FEED_TUNING]:</span>
           </span>
 
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-950 border border-cyan-800/80 text-cyan-300 font-mono font-medium text-[11px]">
-            <ThumbsUp className="w-3 h-3 text-cyan-400" />
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E8F8F2] border border-[#8BDCC0]/80 text-[#0E5B44] font-mono font-bold text-[11px]">
+            <ThumbsUp className="w-3 h-3 text-[#0E5B44]" />
             <span>{Object.values(feedbacks).filter((v) => v === "like").length} Boosted</span>
           </span>
 
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-rose-950 border border-rose-800/80 text-rose-300 font-mono font-medium text-[11px]">
-            <ThumbsDown className="w-3 h-3 text-rose-400" />
-            <span>{Object.values(feedbacks).filter((v) => v === "dislike").length} De-prioritized</span>
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-rose-50 border border-rose-200 text-rose-700 font-mono font-bold text-[11px]">
+            <ThumbsDown className="w-3 h-3 text-rose-500" />
+            <span>{Object.values(feedbacks).filter((v) => v === "dislike").length} Deprioritized</span>
           </span>
 
           {/* Active Topic Multiplier Badges */}
@@ -961,8 +964,8 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                 key={top}
                 className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-md border ${
                   w > 1.0
-                    ? "bg-cyan-950/60 border-cyan-700/60 text-cyan-300"
-                    : "bg-slate-800/80 border-slate-700 text-slate-400"
+                    ? "bg-[#EEEDFD] border-[#635BDB]/30 text-[#635BDB]"
+                    : "bg-slate-100 border-slate-200 text-slate-500"
                 }`}
               >
                 {w > 1.0 ? `+${top} (${w}x)` : `-${top} (${w}x)`}
@@ -970,13 +973,13 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
             ))}
         </div>
 
-        <div className="flex items-center gap-3 self-end md:self-auto">
-          <label className="flex items-center gap-2 cursor-pointer select-none text-slate-300 hover:text-white transition">
+        <div className="flex items-center gap-3 self-end md:self-auto font-mono text-xs">
+          <label className="flex items-center gap-2 cursor-pointer select-none text-slate-600 hover:text-slate-900 transition">
             <input
               type="checkbox"
               checked={hideDisliked}
               onChange={(e) => setHideDisliked(e.target.checked)}
-              className="rounded bg-slate-950 border-slate-700 text-cyan-500 focus:ring-0 focus:ring-offset-0 cursor-pointer w-3.5 h-3.5"
+              className="rounded bg-[#F1F4FA] border-slate-300 text-[#635BDB] focus:ring-0 focus:ring-offset-0 cursor-pointer w-3.5 h-3.5"
             />
             <span className="flex items-center gap-1 text-[11px]">
               {hideDisliked ? <EyeOff className="w-3 h-3 text-slate-400" /> : <Eye className="w-3 h-3 text-slate-400" />}
@@ -987,7 +990,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
           {(Object.keys(feedbacks).length > 0 || Object.values(topicWeights).some((w) => w !== 1.0)) && (
             <button
               onClick={handleResetFeedTuning}
-              className="inline-flex items-center gap-1 text-[11px] text-slate-400 hover:text-rose-300 hover:bg-slate-800 px-2 py-1 rounded transition"
+              className="inline-flex items-center gap-1 text-[11px] text-slate-500 hover:text-rose-600 hover:bg-rose-50 px-2 py-1 rounded-lg transition"
               title="Reset all dynamic topic multipliers and feedback"
             >
               <RotateCcw className="w-3 h-3" />
@@ -998,15 +1001,15 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
       </div>
 
       {/* Feed Counter Bar */}
-      <div className="flex items-center justify-between text-xs text-slate-400 px-1">
+      <div className="flex items-center justify-between text-xs text-slate-500 px-1 font-mono">
         <span>
-          Showing <strong className="text-white font-semibold">{filteredAndSortedNews.length}</strong> of{" "}
-          <strong className="text-white font-semibold">{news.length}</strong> curated intelligence articles
+          Showing <strong className="text-slate-900 font-bold">{filteredAndSortedNews.length}</strong> of{" "}
+          <strong className="text-slate-900 font-bold">{news.length}</strong> curated intelligence articles
         </span>
         {searchQuery && (
           <button
             onClick={() => setSearchQuery("")}
-            className="text-sky-400 hover:text-sky-300 underline"
+            className="text-[#635BDB] hover:text-[#5046CA] underline"
           >
             Clear search
           </button>
@@ -1015,9 +1018,9 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
       {/* News Feed by Selected View Mode */}
       {filteredAndSortedNews.length === 0 ? (
-        <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-16 text-center space-y-3">
-          <Newspaper className="w-8 h-8 text-slate-600 mx-auto" />
-          <h3 className="text-base font-semibold text-slate-300">No articles match your current criteria</h3>
+        <div className="bg-white border border-slate-200/90 rounded-2xl p-16 text-center space-y-3 shadow-sm">
+          <Newspaper className="w-8 h-8 text-slate-400 mx-auto" />
+          <h3 className="text-base font-bold text-slate-900">No articles match your current criteria</h3>
           <p className="text-xs text-slate-500 max-w-sm mx-auto">
             Try switching topics or clearing active search filters to see all available dispatches.
           </p>
@@ -1028,20 +1031,20 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               setOnlyActionable(false);
               setOnlyHighMatch(false);
             }}
-            className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs text-slate-200 font-medium transition-colors"
+            className="px-4 py-2 rounded-xl bg-[#635BDB] hover:bg-[#5046CA] text-xs text-white font-semibold transition-colors shadow-sm"
           >
             Reset All Filters
           </button>
         </div>
       ) : viewMode === "compact" ? (
         /* COMPACT WIRE VIEW */
-        <div className="divide-y divide-slate-800/80 bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden shadow-sm">
+        <div className="divide-y divide-slate-100 bg-white border border-slate-200/90 rounded-2xl overflow-hidden shadow-sm">
           {filteredAndSortedNews.map((article) => {
             const isExpanded = expandedCards.has(article.id);
             return (
               <div
                 key={article.id}
-                className="p-4 hover:bg-slate-800/40 transition-colors space-y-2.5"
+                className="p-4 hover:bg-[#F8FAFC] transition-colors space-y-2.5"
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -1051,53 +1054,53 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                     <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${getGrowthVector(article).color}`}>
                       {getGrowthVector(article).icon} {getGrowthVector(article).badge}
                     </span>
-                    <span className="text-xs text-slate-400 font-medium">{article.source_name}</span>
-                    <span className="text-slate-600">&bull;</span>
-                    <span className="text-[11px] text-slate-500">{formatRelativeTime(article.published_at)}</span>
-                    <span className="text-[11px] font-bold text-sky-400 bg-blue-950/60 border border-blue-900/40 px-2 py-0.2 rounded-full">
-                      {(article.relevance_score * 100).toFixed(0)}% fit
+                    <span className="text-xs text-slate-600 font-medium">{article.source_name}</span>
+                    <span className="text-slate-300">&bull;</span>
+                    <span className="text-[11px] font-mono text-slate-500">{formatRelativeTime(article.published_at)}</span>
+                    <span className="text-[11px] font-mono font-bold text-[#0E5B44] bg-[#8BDCC0]/30 border border-[#8BDCC0]/60 px-2 py-0.2 rounded-full">
+                      [FIT::{(article.relevance_score * 100).toFixed(0)}%]
                     </span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     {/* Like & Dislike Tuning Buttons */}
-                    <div className="flex items-center gap-0.5 bg-slate-950/70 border border-slate-800 rounded-lg p-0.5">
+                    <div className="flex items-center gap-0.5 bg-[#F1F4FA] border border-slate-200 rounded-lg p-0.5">
                       <button
                         onClick={() => handleFeedback(article, "like")}
                         className={`p-1 rounded text-xs transition-colors ${
                           feedbacks[article.id] === "like"
-                            ? "bg-cyan-500/25 text-cyan-400 border border-cyan-500/40"
-                            : "text-slate-400 hover:text-cyan-400 hover:bg-slate-800"
+                            ? "bg-[#8BDCC0] text-[#0E5B44]"
+                            : "text-slate-500 hover:text-[#0E5B44] hover:bg-white"
                         }`}
                         title={feedbacks[article.id] === "like" ? "Liked (+25% boost) • Click to undo" : "Like (boosts this topic in feed)"}
                       >
-                        <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-cyan-400/30" : ""}`} />
+                        <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-[#0E5B44]" : ""}`} />
                       </button>
                       <button
                         onClick={() => handleFeedback(article, "dislike")}
                         className={`p-1 rounded text-xs transition-colors ${
                           feedbacks[article.id] === "dislike"
-                            ? "bg-rose-500/25 text-rose-400 border border-rose-500/40"
-                            : "text-slate-400 hover:text-rose-400 hover:bg-slate-800"
+                            ? "bg-rose-100 text-rose-700"
+                            : "text-slate-500 hover:text-rose-700 hover:bg-white"
                         }`}
                         title={feedbacks[article.id] === "dislike" ? "Disliked (deprioritized) • Click to undo" : "Dislike (deprioritizes this topic)"}
                       >
-                        <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-400/30" : ""}`} />
+                        <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-700" : ""}`} />
                       </button>
                     </div>
 
                     <button
                       onClick={() => handleCopyLink(article)}
-                      className="p-1 text-slate-500 hover:text-slate-300 transition-colors"
+                      className="p-1 text-slate-400 hover:text-slate-700 transition-colors"
                       title="Copy link"
                     >
-                      {copiedId === article.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+                      {copiedId === article.id ? <Check className="w-3.5 h-3.5 text-[#0E5B44]" /> : <Share2 className="w-3.5 h-3.5" />}
                     </button>
                     <button
                       onClick={() => handleSave(article.id)}
                       disabled={savedIds.has(article.id) || savingId === article.id}
                       className={`p-1 transition-colors ${
-                        savedIds.has(article.id) ? "text-sky-400" : "text-slate-500 hover:text-sky-400"
+                        savedIds.has(article.id) ? "text-[#635BDB]" : "text-slate-400 hover:text-[#635BDB]"
                       }`}
                       title={savedIds.has(article.id) ? "Saved" : "Save article"}
                     >
@@ -1105,7 +1108,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                     </button>
                     <button
                       onClick={() => toggleCardExpand(article.id)}
-                      className="text-xs text-slate-400 hover:text-sky-400 flex items-center gap-1 ml-1"
+                      className="text-xs font-mono text-slate-500 hover:text-[#635BDB] flex items-center gap-1 ml-1"
                     >
                       <span>{isExpanded ? "Collapse" : "Preview"}</span>
                       {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
@@ -1113,7 +1116,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                   </div>
                 </div>
 
-                <h3 className="text-sm font-semibold text-slate-100 hover:text-sky-300 transition-colors">
+                <h3 className="text-sm font-semibold text-slate-900 hover:text-[#635BDB] transition-colors">
                   <a
                     href={article.canonical_url}
                     target="_blank"
@@ -1121,20 +1124,20 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                     className="inline-flex items-center gap-1.5"
                   >
                     <span>{article.title}</span>
-                    <ExternalLink className="w-3 h-3 text-slate-500 inline shrink-0" />
+                    <ExternalLink className="w-3 h-3 text-slate-400 inline shrink-0" />
                   </a>
                 </h3>
 
                 {isExpanded && (
-                  <div className="pt-2 space-y-2 border-t border-slate-800">
-                    <ul className="text-xs text-slate-300 pl-4 list-disc marker:text-sky-400 space-y-1">
+                  <div className="pt-2 space-y-2 border-t border-slate-100">
+                    <ul className="text-xs text-slate-600 pl-4 list-disc marker:text-[#635BDB] space-y-1">
                       {article.summary_bullets.map((b, i) => (
                         <li key={i}>{b}</li>
                       ))}
                     </ul>
                     {article.personal_impact && (
-                      <div className="bg-blue-950/30 border border-blue-900/40 rounded-lg p-2.5 text-xs text-sky-200">
-                        <span className="font-semibold text-sky-300">Why it matters: </span>
+                      <div className="bg-[#E8F8F2] border border-[#8BDCC0]/60 rounded-xl p-2.5 text-xs text-slate-800">
+                        <span className="font-mono font-bold text-[#0E5B44] text-[11px] mr-1">[GROWTH_IMPACT]:</span>
                         {article.personal_impact}
                       </div>
                     )}
@@ -1152,7 +1155,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
             return (
               <article
                 key={article.id}
-                className="bg-slate-900/80 border border-slate-800 hover:border-slate-700/80 rounded-2xl p-5 hover:shadow-lg hover:shadow-blue-950/20 transition-all flex flex-col justify-between space-y-4"
+                className="bg-white border border-slate-200/90 hover:border-[#635BDB]/40 rounded-2xl p-5 hover:shadow-[0_4px_20px_rgba(99,91,219,0.08)] transition-all flex flex-col justify-between space-y-4 shadow-[0_2px_12px_rgba(99,91,219,0.03)]"
               >
                 <div className="space-y-3">
                   {/* Card Meta */}
@@ -1164,46 +1167,46 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                       <span className={`px-2 py-0.5 rounded text-[10px] font-semibold border ${getGrowthVector(article).color}`}>
                         {getGrowthVector(article).icon} {getGrowthVector(article).badge}
                       </span>
-                      <span className="text-slate-400 font-medium text-[11px]">{article.source_name}</span>
+                      <span className="text-slate-500 font-medium text-[11px]">{article.source_name}</span>
                     </div>
 
                     <div className="flex items-center gap-2">
                       {/* Like & Dislike Tuning Buttons */}
-                      <div className="flex items-center gap-0.5 bg-slate-950/70 border border-slate-800 rounded-lg p-0.5">
+                      <div className="flex items-center gap-0.5 bg-[#F1F4FA] border border-slate-200 rounded-lg p-0.5">
                         <button
                           onClick={() => handleFeedback(article, "like")}
                           className={`p-1 rounded text-xs transition-colors ${
                             feedbacks[article.id] === "like"
-                              ? "bg-cyan-500/25 text-cyan-400 border border-cyan-500/40"
-                              : "text-slate-400 hover:text-cyan-400 hover:bg-slate-800"
+                              ? "bg-[#8BDCC0] text-[#0E5B44]"
+                              : "text-slate-500 hover:text-[#0E5B44] hover:bg-white"
                           }`}
                           title={feedbacks[article.id] === "like" ? "Liked (+25% boost) • Click to undo" : "Like (boosts this topic in feed)"}
                         >
-                          <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-cyan-400/30" : ""}`} />
+                          <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-[#0E5B44]" : ""}`} />
                         </button>
                         <button
                           onClick={() => handleFeedback(article, "dislike")}
                           className={`p-1 rounded text-xs transition-colors ${
                             feedbacks[article.id] === "dislike"
-                              ? "bg-rose-500/25 text-rose-400 border border-rose-500/40"
-                              : "text-slate-400 hover:text-rose-400 hover:bg-slate-800"
+                              ? "bg-rose-100 text-rose-700"
+                              : "text-slate-500 hover:text-rose-700 hover:bg-white"
                           }`}
                           title={feedbacks[article.id] === "dislike" ? "Disliked (deprioritized) • Click to undo" : "Dislike (deprioritizes this topic)"}
                         >
-                          <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-400/30" : ""}`} />
+                          <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-700" : ""}`} />
                         </button>
                       </div>
 
-                      <span className="text-[11px] font-bold text-sky-300 bg-slate-800/90 px-2 py-0.5 rounded-md">
-                        {(getDynamicScore(article) * 100).toFixed(0)}% Fit
+                      <span className="font-mono text-[11px] font-bold text-[#0E5B44] bg-[#8BDCC0]/30 border border-[#8BDCC0]/60 px-2 py-0.5 rounded-md">
+                        [FIT::{(getDynamicScore(article) * 100).toFixed(0)}%]
                       </span>
                       <button
                         onClick={() => handleSave(article.id)}
                         disabled={savedIds.has(article.id) || savingId === article.id}
                         className={`p-1 rounded transition-colors ${
                           savedIds.has(article.id)
-                            ? "text-sky-400"
-                            : "text-slate-500 hover:text-sky-400 hover:bg-slate-800"
+                            ? "text-[#635BDB]"
+                            : "text-slate-400 hover:text-[#635BDB] hover:bg-slate-100"
                         }`}
                         title={savedIds.has(article.id) ? "Saved" : "Save article"}
                       >
@@ -1217,7 +1220,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base font-bold text-slate-100 hover:text-sky-300 transition-colors leading-snug">
+                  <h3 className="text-base font-bold text-slate-900 hover:text-[#635BDB] transition-colors leading-snug">
                     <a
                       href={article.canonical_url}
                       target="_blank"
@@ -1225,13 +1228,13 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                       className="inline-flex items-center gap-1.5"
                     >
                       <span>{article.title}</span>
-                      <ExternalLink className="w-3.5 h-3.5 text-slate-500 inline shrink-0" />
+                      <ExternalLink className="w-3.5 h-3.5 text-slate-400 inline shrink-0" />
                     </a>
                   </h3>
 
                   {/* Summary Preview */}
                   <div className="space-y-1.5">
-                    <ul className="space-y-1 text-xs text-slate-300 pl-3.5 list-disc marker:text-sky-400">
+                    <ul className="space-y-1 text-xs text-slate-600 pl-3.5 list-disc marker:text-[#635BDB]">
                       {(isExpanded ? article.summary_bullets : article.summary_bullets.slice(0, 2)).map((b, i) => (
                         <li key={i} className="leading-relaxed line-clamp-2">{b}</li>
                       ))}
@@ -1240,29 +1243,29 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
                   {/* Personal Impact */}
                   {article.personal_impact && (
-                    <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-xl p-3 text-xs text-slate-200 flex items-start gap-2.5 shadow-inner">
-                      <Rocket className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                    <div className="bg-[#E8F8F2] border border-[#8BDCC0]/60 rounded-xl p-3 text-xs text-slate-800 flex items-start gap-2.5">
+                      <Rocket className="w-3.5 h-3.5 text-[#0E5B44] shrink-0 mt-0.5" />
                       <div className="line-clamp-2">
-                        <span className="font-bold text-emerald-300">Growth Impact: </span>
-                        {article.personal_impact}
+                        <span className="font-mono font-bold text-[#0E5B44] text-[11px] mr-1">[GROWTH_IMPACT]:</span>
+                        <span className="text-slate-700">{article.personal_impact}</span>
                       </div>
                     </div>
                   )}
 
                   {/* Expanded Actions */}
                   {isExpanded && article.practical_actions && article.practical_actions.length > 0 && (
-                    <div className="space-y-1.5 pt-2 border-t border-slate-800/80">
-                      <h4 className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                        <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
-                        Actionable Growth Moves
+                    <div className="space-y-1.5 pt-2 border-t border-slate-100">
+                      <h4 className="text-[11px] font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                        <TrendingUp className="w-3.5 h-3.5 text-[#635BDB]" />
+                        // ACTIONABLE_GROWTH_MOVES
                       </h4>
                       <div className="space-y-1.5">
                         {article.practical_actions.map((act, i) => (
                           <div
                             key={i}
-                            className="bg-slate-800/60 border border-slate-700/60 rounded-lg p-2 text-xs text-slate-300 flex items-start gap-2"
+                            className="bg-[#F8FAFC] border border-slate-200/80 rounded-xl p-2 text-xs text-slate-700 flex items-start gap-2"
                           >
-                            <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                            <CheckCircle className="w-3.5 h-3.5 text-[#0E5B44] shrink-0 mt-0.5" />
                             <span>{act}</span>
                           </div>
                         ))}
@@ -1272,9 +1275,9 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                 </div>
 
                 {/* Footer Controls */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs text-slate-400">
+                <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500 font-mono">
                   <div className="flex items-center gap-2 text-[11px]">
-                    <Clock className="w-3 h-3 text-slate-500" />
+                    <Clock className="w-3 h-3 text-slate-400" />
                     <span>{formatRelativeTime(article.published_at)}</span>
                     <span>&bull;</span>
                     <span>{estimateReadTime(article)}</span>
@@ -1282,41 +1285,41 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
 
                   <div className="flex items-center gap-2">
                     {/* Like & Dislike Tuning Buttons */}
-                    <div className="flex items-center gap-0.5 bg-slate-950/70 border border-slate-800 rounded-lg p-0.5">
+                    <div className="flex items-center gap-0.5 bg-[#F1F4FA] border border-slate-200 rounded-lg p-0.5">
                       <button
                         onClick={() => handleFeedback(article, "like")}
                         className={`p-1 rounded text-xs transition-colors ${
                           feedbacks[article.id] === "like"
-                            ? "bg-cyan-500/25 text-cyan-400 border border-cyan-500/40"
-                            : "text-slate-400 hover:text-cyan-400 hover:bg-slate-800"
+                            ? "bg-[#8BDCC0] text-[#0E5B44]"
+                            : "text-slate-500 hover:text-[#0E5B44] hover:bg-white"
                         }`}
                         title={feedbacks[article.id] === "like" ? "Liked (+25% boost) • Click to undo" : "Like (boosts this topic in feed)"}
                       >
-                        <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-cyan-400/30" : ""}`} />
+                        <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-[#0E5B44]" : ""}`} />
                       </button>
                       <button
                         onClick={() => handleFeedback(article, "dislike")}
                         className={`p-1 rounded text-xs transition-colors ${
                           feedbacks[article.id] === "dislike"
-                            ? "bg-rose-500/25 text-rose-400 border border-rose-500/40"
-                            : "text-slate-400 hover:text-rose-400 hover:bg-slate-800"
+                            ? "bg-rose-100 text-rose-700"
+                            : "text-slate-500 hover:text-rose-700 hover:bg-white"
                         }`}
                         title={feedbacks[article.id] === "dislike" ? "Disliked (deprioritized) • Click to undo" : "Dislike (deprioritizes this topic)"}
                       >
-                        <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-400/30" : ""}`} />
+                        <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-700" : ""}`} />
                       </button>
                     </div>
 
                     <button
                       onClick={() => handleCopyLink(article)}
-                      className="p-1 text-slate-500 hover:text-slate-300"
+                      className="p-1 text-slate-400 hover:text-slate-700"
                       title="Share link"
                     >
-                      {copiedId === article.id ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Share2 className="w-3.5 h-3.5" />}
+                      {copiedId === article.id ? <Check className="w-3.5 h-3.5 text-[#0E5B44]" /> : <Share2 className="w-3.5 h-3.5" />}
                     </button>
                     <button
                       onClick={() => toggleCardExpand(article.id)}
-                      className="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center gap-0.5"
+                      className="text-xs font-mono text-[#635BDB] hover:text-[#5046CA] font-semibold flex items-center gap-0.5"
                     >
                       <span>{isExpanded ? "Less" : "More"}</span>
                       {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -1333,7 +1336,7 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
           {feedStories.map((article) => (
             <article
               key={article.id}
-              className="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 hover:border-slate-700/80 transition-all space-y-4 shadow-sm"
+              className="bg-white border border-slate-200/90 rounded-2xl p-6 hover:border-[#635BDB]/40 transition-all space-y-4 shadow-[0_2px_12px_rgba(99,91,219,0.03)]"
             >
               <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-2 flex-wrap">
@@ -1343,53 +1346,53 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                   <span className={`px-2.5 py-0.5 rounded text-[10px] font-semibold border ${getGrowthVector(article).color}`}>
                     {getGrowthVector(article).icon} {getGrowthVector(article).badge}
                   </span>
-                  <span className="text-slate-300 font-semibold">{article.source_name}</span>
-                  <span className="text-slate-600">&bull;</span>
-                  <span className="text-slate-400">{formatRelativeTime(article.published_at)}</span>
-                  <span className="text-slate-600">&bull;</span>
-                  <span className="text-slate-400">{estimateReadTime(article)}</span>
+                  <span className="text-slate-700 font-semibold">{article.source_name}</span>
+                  <span className="text-slate-300">&bull;</span>
+                  <span className="text-slate-500 font-mono">{formatRelativeTime(article.published_at)}</span>
+                  <span className="text-slate-300">&bull;</span>
+                  <span className="text-slate-500 font-mono">{estimateReadTime(article)}</span>
                 </div>
 
                 <div className="flex items-center gap-2">
                   {/* Like & Dislike Tuning Buttons */}
-                  <div className="flex items-center gap-0.5 bg-slate-950/70 border border-slate-800 rounded-lg p-0.5">
+                  <div className="flex items-center gap-0.5 bg-[#F1F4FA] border border-slate-200 rounded-lg p-0.5">
                     <button
                       onClick={() => handleFeedback(article, "like")}
                       className={`p-1.5 rounded text-xs transition-colors ${
                         feedbacks[article.id] === "like"
-                          ? "bg-cyan-500/25 text-cyan-400 border border-cyan-500/40"
-                          : "text-slate-400 hover:text-cyan-400 hover:bg-slate-800"
+                          ? "bg-[#8BDCC0] text-[#0E5B44]"
+                          : "text-slate-500 hover:text-[#0E5B44] hover:bg-white"
                       }`}
                       title={feedbacks[article.id] === "like" ? "Liked (+25% boost) • Click to undo" : "Like (boosts this topic in feed)"}
                     >
-                      <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-cyan-400/30" : ""}`} />
+                      <ThumbsUp className={`w-3.5 h-3.5 ${feedbacks[article.id] === "like" ? "fill-[#0E5B44]" : ""}`} />
                     </button>
                     <button
                       onClick={() => handleFeedback(article, "dislike")}
                       className={`p-1.5 rounded text-xs transition-colors ${
                         feedbacks[article.id] === "dislike"
-                          ? "bg-rose-500/25 text-rose-400 border border-rose-500/40"
-                          : "text-slate-400 hover:text-rose-400 hover:bg-slate-800"
+                          ? "bg-rose-100 text-rose-700"
+                          : "text-slate-500 hover:text-rose-700 hover:bg-white"
                       }`}
                       title={feedbacks[article.id] === "dislike" ? "Disliked (deprioritized) • Click to undo" : "Dislike (deprioritizes this topic)"}
                     >
-                      <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-400/30" : ""}`} />
+                      <ThumbsDown className={`w-3.5 h-3.5 ${feedbacks[article.id] === "dislike" ? "fill-rose-700" : ""}`} />
                     </button>
                   </div>
 
-                  <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-400 bg-emerald-950/50 border border-emerald-800/40 px-2 py-0.5 rounded">
-                    <ShieldCheck className="w-3 h-3" />
-                    Verified
+                  <span className="inline-flex items-center gap-1 text-[11px] font-mono font-semibold text-[#0E5B44] bg-[#8BDCC0]/25 border border-[#8BDCC0]/50 px-2 py-0.5 rounded">
+                    <ShieldCheck className="w-3 h-3 text-[#0E5B44]" />
+                    [VERIFIED]
                   </span>
-                  <span className="text-[11px] font-bold text-sky-300 bg-slate-800 px-2.5 py-0.5 rounded">
-                    {(getDynamicScore(article) * 100).toFixed(0)}% Relevance
+                  <span className="text-[11px] font-mono font-bold text-[#0E5B44] bg-[#8BDCC0]/30 border border-[#8BDCC0]/60 px-2.5 py-0.5 rounded-md">
+                    [FIT::{(getDynamicScore(article) * 100).toFixed(0)}%]
                   </span>
                   <button
                     onClick={() => handleCopyLink(article)}
-                    className="p-1 rounded text-slate-500 hover:text-slate-300 transition-colors"
+                    className="p-1 rounded text-slate-400 hover:text-slate-700 transition-colors"
                     title="Copy canonical link"
                   >
-                    {copiedId === article.id ? <Check className="w-4 h-4 text-emerald-400" /> : <Share2 className="w-4 h-4" />}
+                    {copiedId === article.id ? <Check className="w-4 h-4 text-[#0E5B44]" /> : <Share2 className="w-4 h-4" />}
                   </button>
                   <button
                     onClick={() => handleSave(article.id)}
@@ -1397,8 +1400,8 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                     title={savedIds.has(article.id) ? "Saved" : "Save article"}
                     className={`p-1 rounded transition-colors ${
                       savedIds.has(article.id)
-                        ? "text-sky-400 cursor-default"
-                        : "text-slate-500 hover:text-sky-400 hover:bg-slate-800"
+                        ? "text-[#635BDB] cursor-default"
+                        : "text-slate-400 hover:text-[#635BDB] hover:bg-slate-100"
                     }`}
                   >
                     {savedIds.has(article.id) ? (
@@ -1410,23 +1413,23 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
                 </div>
               </div>
 
-              <h3 className="text-lg font-bold text-slate-100 leading-snug">
+              <h3 className="text-lg font-bold text-slate-900 leading-snug">
                 <a
                   href={article.canonical_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-sky-300 transition-colors inline-flex items-center gap-2 group"
+                  className="hover:text-[#635BDB] transition-colors inline-flex items-center gap-2 group"
                 >
                   <span>{article.title}</span>
-                  <ExternalLink className="w-4 h-4 text-slate-500 group-hover:text-sky-300 inline shrink-0" />
+                  <ExternalLink className="w-4 h-4 text-slate-400 group-hover:text-[#635BDB] inline shrink-0" />
                 </a>
               </h3>
 
-              <div className="space-y-2 bg-slate-950/30 border border-slate-800/80 rounded-xl p-4">
-                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Factual Takeaways
+              <div className="space-y-2 bg-[#F8FAFC] border border-slate-200/80 rounded-xl p-4">
+                <h4 className="text-xs font-mono font-bold text-slate-600 uppercase tracking-wider">
+                  // FACTUAL_TAKEAWAYS
                 </h4>
-                <ul className="space-y-1.5 text-xs text-slate-200 pl-4 list-disc marker:text-sky-400">
+                <ul className="space-y-1.5 text-xs text-slate-700 pl-4 list-disc marker:text-[#635BDB]">
                   {article.summary_bullets.map((b, i) => (
                     <li key={i} className="leading-relaxed">{b}</li>
                   ))}
@@ -1434,28 +1437,30 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
               </div>
 
               {article.personal_impact && (
-                <div className="bg-emerald-950/20 border border-emerald-900/40 rounded-xl p-4 text-xs text-slate-200 flex items-start gap-3 shadow-inner">
-                  <Rocket className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <div className="bg-[#E8F8F2] border border-[#8BDCC0]/60 rounded-xl p-4 text-xs text-slate-800 flex items-start gap-3 shadow-sm">
+                  <Rocket className="w-4 h-4 text-[#0E5B44] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold text-emerald-300 block mb-0.5">Why this powers your growth: </span>
-                    <span className="leading-relaxed text-slate-200">{article.personal_impact}</span>
+                    <span className="font-mono font-bold text-[#0E5B44] block mb-0.5 uppercase tracking-wider text-[11px]">
+                      [GROWTH_CATALYST]:
+                    </span>
+                    <span className="leading-relaxed text-slate-700">{article.personal_impact}</span>
                   </div>
                 </div>
               )}
 
               {article.practical_actions && article.practical_actions.length > 0 && (
-                <div className="space-y-2 pt-2 border-t border-slate-800/80">
-                  <h4 className="text-xs font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                    <TrendingUp className="w-3.5 h-3.5 text-sky-400" />
-                    Recommended Growth Moves
+                <div className="space-y-2 pt-2 border-t border-slate-100">
+                  <h4 className="text-xs font-mono font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                    <TrendingUp className="w-3.5 h-3.5 text-[#635BDB]" />
+                    // RECOMMENDED_GROWTH_MOVES
                   </h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {article.practical_actions.map((act, i) => (
                       <div
                         key={i}
-                        className="bg-slate-800/50 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-300 flex items-start gap-2"
+                        className="bg-[#F8FAFC] border border-slate-200/80 rounded-xl p-2.5 text-xs text-slate-700 flex items-start gap-2"
                       >
-                        <CheckCircle className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
+                        <CheckCircle className="w-3.5 h-3.5 text-[#0E5B44] shrink-0 mt-0.5" />
                         <span>{act}</span>
                       </div>
                     ))}
@@ -1468,13 +1473,13 @@ export function NewsView({ news, onRefresh }: NewsViewProps) {
       )}
 
       {/* Footer Navigation Bar */}
-      <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 text-center text-xs text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <div className="bg-white border border-slate-200/90 rounded-2xl p-4 text-center text-xs text-slate-600 flex flex-col sm:flex-row items-center justify-between gap-2 shadow-[0_2px_12px_rgba(99,91,219,0.02)] font-mono">
         <div className="flex items-center gap-1.5">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <ShieldCheck className="w-4 h-4 text-[#0E5B44]" />
           <span>All articles verified against official international and canonical sources</span>
         </div>
         <span className="text-slate-500">
-          Showing {filteredAndSortedNews.length} intelligence items • Live cross-checked
+          Showing {filteredAndSortedNews.length} intelligence items &bull; Live cross-checked
         </span>
       </div>
     </div>

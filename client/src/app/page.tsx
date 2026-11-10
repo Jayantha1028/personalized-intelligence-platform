@@ -137,7 +137,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100 font-sans antialiased">
+    <div className="flex min-h-screen bg-[#F7F8FC] bg-tech-grid text-slate-900 font-sans antialiased">
       {/* Navigation Sidebar */}
       <Sidebar
         currentTab={currentTab}
@@ -165,9 +165,12 @@ export default function Home() {
 
         <main className="flex-1 p-8 overflow-y-auto">
           {loading ? (
-            <div className="h-96 flex flex-col items-center justify-center gap-3 text-slate-400">
-              <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
-              <p className="text-sm font-medium">Connecting to Intelligence Engine...</p>
+            <div className="h-96 flex flex-col items-center justify-center gap-3 text-slate-500">
+              <Loader2 className="w-8 h-8 animate-spin text-[#635BDB]" />
+              <div className="flex items-center gap-2 font-mono text-xs text-slate-600 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-[#8BDCC0] animate-pulse"></span>
+                <span>[SYS::CONNECTING_INTELLIGENCE_ENGINE]</span>
+              </div>
             </div>
           ) : (
             <>
